@@ -15,5 +15,6 @@ public:
     static TimeManager* getInstance();
     void reset();
     void update();
+    void clean();
     float getDeltaTime();
 };

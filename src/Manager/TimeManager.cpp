@@ -1,7 +1,7 @@
 #include "TimeManager.h"
 #include <SDL.h>
-
-TimeManager* TimeManager::instance = NULL;
+#include <iostream>
+TimeManager *TimeManager::instance = NULL;
 TimeManager::TimeManager()
 {
     reset();
@@ -9,11 +9,9 @@ TimeManager::TimeManager()
 
 TimeManager::~TimeManager()
 {
-    delete instance;
-    instance = NULL;
 }
 
-TimeManager* TimeManager::getInstance()
+TimeManager *TimeManager::getInstance()
 {
     if (instance == NULL)
     {
@@ -32,10 +30,16 @@ void TimeManager::reset()
 void TimeManager::update()
 {
     elapsedTime = SDL_GetTicks() - startTime; // ms
-    deltaTime = elapsedTime / 1000.0f; // convert ms to s
+    deltaTime = elapsedTime / 1000.0f;        // convert ms to s
 }
 
 float TimeManager::getDeltaTime()
 {
     return deltaTime;
+}
+void TimeManager::clean()
+{
+    std::cout << "[INFO]: TimeManager destroyed" << std::endl;
+    delete instance;
+    instance = NULL;
 }

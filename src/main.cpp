@@ -15,7 +15,9 @@ int main(int argc, char *argv[])
             timer->reset();
         }
     }
-    delete timer;
     delete game;
+    game = NULL;
+    timer->clean();
+    timer = NULL;
     return 0;
 }

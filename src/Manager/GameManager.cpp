@@ -16,6 +16,7 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
     clean();
+    std::cout << "[INFO]: GameManager destroyed" << std::endl;
 }
 
 void GameManager::init(){
@@ -38,6 +39,7 @@ void GameManager::init(){
     if (!running) {
         std::cerr << "[ERROR]: " << SDL_GetError() << std::endl;
     }
+    std::cout << "[INFO]: GameManager initialized" << std::endl;
 }
 
 void GameManager::event(){
