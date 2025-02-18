@@ -14,9 +14,11 @@ public:
     void update();
     void render();
     void clean();
-    bool isRunning(){ return running; };
+
+    void run();
 
 private:
+    TimeManager *timer;
     bool running;
     SDL_Window *window;
     SDL_Renderer *renderer;
