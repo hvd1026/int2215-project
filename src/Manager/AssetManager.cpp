@@ -62,4 +62,6 @@ void AssetManager::clean()
     }
 
     mTextures.clear();
+    delete sInstance;
+    sInstance = nullptr;
 }
