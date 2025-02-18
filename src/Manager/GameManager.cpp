@@ -4,6 +4,7 @@
 
 #include "GameManager.h"
 #include "TimeManager.h"
+#include "AssetManager.h"
 #include "../constants.h"
 
 GameManager::GameManager()
@@ -46,10 +47,14 @@ void GameManager::init()
     {
         std::cerr << "[ERROR]: " << SDL_GetError() << std::endl;
     }
-    std::cout << "[INFO]: GameManager initialized" << std::endl;
+    std::cout << "[INFO]: Game started successfully" << std::endl;
 
     // timer
     timer = TimeManager::getInstance();
+
+    // asset manager
+    AssetManager::getInstance()->setRenderer(renderer);
+    AssetManager::getInstance()->loadAllTextures();
 }
 
 void GameManager::event()
@@ -74,17 +79,22 @@ void GameManager::render()
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
+    
+
     SDL_RenderPresent(renderer);
 }
 
 void GameManager::clean()
 {
+    timer->clean();
+    timer = NULL;
+
+    AssetManager::getInstance()->clean();
+
     SDL_DestroyWindow(window);
     window = NULL;
     SDL_DestroyRenderer(renderer);
     renderer = NULL;
-    timer->clean();
-    timer = NULL;
     SDL_Quit();
     IMG_Quit();
 }
