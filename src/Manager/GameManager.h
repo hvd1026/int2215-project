@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include "TimeManager.h"
 
 class GameManager
 {
@@ -18,5 +19,5 @@ public:
 private:
     bool running;
     SDL_Window *window;
-    SDL_Renderer *renderer;   
+    SDL_Renderer *renderer;
 };
