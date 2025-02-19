@@ -14,6 +14,7 @@ Background *background = new Background();
 // Player
 #include "../GameObject/Player.h"
 Player *player = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100);
+#include <vector>
 
 GameManager::GameManager()
 {
@@ -91,6 +92,7 @@ void GameManager::update()
 {
     background->update();
     player->update();
+    std::cout << player->bullets.size() << std::endl;
 }
 void GameManager::render()
 {

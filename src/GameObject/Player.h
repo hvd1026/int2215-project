@@ -2,7 +2,8 @@
 
 #include <SDL.h>
 #include "../Animation/Animation.h"
-
+#include "Bullet.h"
+#include <vector>
 class Player
 {
 private:
@@ -15,8 +16,10 @@ private:
     SDL_Rect src[3];
     SDL_Rect shipDest;
     SDL_Rect boosterDest;
-    Animation* boosterAnimation;
+    Animation *boosterAnimation;
+
 public:
+    static std::vector<Bullet* > bullets;
     Player(int x, int y);
     ~Player();
     void update();

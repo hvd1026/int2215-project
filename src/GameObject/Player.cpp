@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vector>
 
-std::vector<Bullet *> bullets;
+std::vector<Bullet *> Player::bullets;
 
 Player::Player(int x, int y)
 {
