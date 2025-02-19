@@ -5,3 +5,4 @@
 #define SCREEN_WIDTH 512
 #define SCREEN_HEIGHT 800
 #define FPS 60
+#define BG_SCROLL 2
