@@ -79,8 +79,6 @@ void GameManager::render()
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
-    
-
     SDL_RenderPresent(renderer);
 }
 
@@ -103,13 +101,13 @@ void GameManager::run()
 {
     while (running)
     {
-        timer->update();
+        timer->update(); // update delta time
         event();
-        update();
-        if (timer->getDeltaTime() >= (1.0f / FPS))
+        if (timer->getDeltaTime() >= (1.0f / FPS)) // limit game's fps
         {
-            render();
-            timer->reset();
+            update();       // update game
+            render();       // render everything
+            timer->reset(); // reset delta time
         }
     }
 }
