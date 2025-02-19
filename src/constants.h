@@ -12,6 +12,7 @@
 #define PLAYER_SIZE 32
 #define PLAYER_BOOSTER_TIME 0.3f
 #define PLAYER_SHOOT_DELAY 0.2f
+#define PLAYER_HP 3
 
 // Bullet setting
 #define BULLET_SPEED 500

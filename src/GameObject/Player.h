@@ -10,6 +10,7 @@ private:
     int xPos, yPos;
     int velocity;
     float delayTime;
+    int hp;
     float shootTimeCounter;
     SDL_Rect src[3];
     SDL_Rect shipDest;

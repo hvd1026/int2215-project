@@ -10,6 +10,7 @@
 
 Player::Player(int x, int y)
 {
+    hp = PLAYER_HP;
     delayTime = PLAYER_SHOOT_DELAY;
     shootTimeCounter = PLAYER_SHOOT_DELAY;
     xPos = x;
