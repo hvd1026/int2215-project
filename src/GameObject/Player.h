@@ -9,6 +9,8 @@ private:
     int state; // 0 : straight, 1: left, 2: right
     int xPos, yPos;
     int velocity;
+    float delayTime;
+    float shootTimeCounter;
     SDL_Rect src[3];
     SDL_Rect shipDest;
     SDL_Rect boosterDest;
@@ -18,5 +20,5 @@ public:
     ~Player();
     void update();
     void render();
-    void setState(int _state);
+    void shoot();
 };

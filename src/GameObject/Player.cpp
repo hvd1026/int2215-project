@@ -5,9 +5,13 @@
 #include "../Manager/EventManager.h"
 
 #include <string>
+#include <iostream>
+#include <vector>
 
 Player::Player(int x, int y)
 {
+    delayTime = PLAYER_SHOOT_DELAY;
+    shootTimeCounter = PLAYER_SHOOT_DELAY;
     xPos = x;
     yPos = y;
     velocity = PLAYER_SPEED;
@@ -33,6 +37,7 @@ Player::~Player()
 void Player::update()
 {
     boosterAnimation->update();
+    shootTimeCounter += TimeManager::getInstance()->getDeltaTime();
     // listen even => move and shoot
     state = 0;
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT))
@@ -53,7 +58,14 @@ void Player::update()
     {
         yPos += velocity * TimeManager::getInstance()->getDeltaTime();
     }
-
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE))
+    {
+        if (shootTimeCounter >= delayTime)
+        {
+            shoot();
+            shootTimeCounter = 0.0f;
+        }
+    }
 
     // update dest rect
     boosterDest.x = xPos;
@@ -71,7 +83,7 @@ void Player::render()
     AssetManager::getInstance()->draw(booster, boosterAnimation->getSrcRect(), boosterDest);
 }
 
-void Player::setState(int _state)
+void Player::shoot()
 {
-    state = _state;
+    std::cout << "Pew pew" << std::endl;
 }
