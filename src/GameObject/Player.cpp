@@ -14,8 +14,10 @@ std::vector<Bullet *> Player::bullets;
 Player::Player(int x, int y)
 {
     hp = PLAYER_HP;
-    delayTime = PLAYER_SHOOT_DELAY;
-    shootTimeCounter = PLAYER_SHOOT_DELAY;
+    slowShootDelay = SLOW_BULLET_DELAY;
+    slowShootCounter = SLOW_BULLET_DELAY;
+    fastShootDelay = FAST_BULLET_DELAY;
+    fastShootCounter = FAST_BULLET_DELAY;
     xPos = x;
     yPos = y;
     velocity = PLAYER_SPEED;
@@ -55,7 +57,8 @@ Player::~Player()
 void Player::update()
 {
     boosterAnimation->update();
-    shootTimeCounter += TimeManager::getInstance()->getDeltaTime();
+    slowShootCounter += TimeManager::getInstance()->getDeltaTime();
+    fastShootCounter += TimeManager::getInstance()->getDeltaTime();
     // listen even => move and shoot
     state = 0;
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT) && !moveOutOfScreen(MOVE_LEFT))
@@ -80,12 +83,20 @@ void Player::update()
         // down
         yPos += velocity * TimeManager::getInstance()->getDeltaTime();
     }
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_Z))
+    {
+        if (fastShootCounter >= fastShootDelay)
+        {
+            shoot(FAST_BULLET);
+            fastShootCounter = 0.0f;
+        }
+    }
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_X))
     {
-        if (shootTimeCounter >= delayTime)
+        if (slowShootCounter >= slowShootDelay)
         {
-            shoot();
-            shootTimeCounter = 0.0f;
+            shoot(SLOW_BULLET);
+            slowShootCounter = 0.0f;
         }
     }
 
@@ -116,7 +127,7 @@ void Player::render()
     std::string booster = "booster" + std::to_string(state);
 
     // bullets
-    for (auto it = bullets.begin(); it != bullets.end();it++)
+    for (auto it = bullets.begin(); it != bullets.end(); it++)
     {
         (*it)->render();
     }
@@ -126,9 +137,9 @@ void Player::render()
     AssetManager::getInstance()->draw(booster, boosterAnimation->getSrcRect(), boosterDest);
 }
 
-void Player::shoot()
+void Player::shoot(int type)
 {
-    bullets.push_back(new Bullet(xPos + PLAYER_SIZE / 2 - BULLET_SIZE / 2, yPos));
+    bullets.push_back(new Bullet(xPos + PLAYER_SIZE / 2 - BULLET_SIZE / 2, yPos, type));
 }
 
 bool Player::moveOutOfScreen(int direction)

@@ -10,9 +10,9 @@ private:
     int state; // 0 : straight, 1: left, 2: right
     int xPos, yPos;
     int velocity;
-    float delayTime;
+    float slowShootDelay, slowShootCounter;
+    float fastShootDelay, fastShootCounter;
     int hp;
-    float shootTimeCounter;
     SDL_Rect src[3];
     SDL_Rect shipDest;
     SDL_Rect boosterDest;
@@ -24,6 +24,6 @@ public:
     ~Player();
     void update();
     void render();
-    void shoot();
+    void shoot(int type);
     bool moveOutOfScreen(int direction);
 };

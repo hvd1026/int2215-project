@@ -6,12 +6,23 @@
 #include <SDL.h>
 #include <iostream>
 
-Bullet::Bullet(int x, int y)
+Bullet::Bullet(int x, int y, int type)
 {
     xPos = x;
     yPos = y;
-    velocity = BULLET_SPEED;
-    animate = new Animation(0, 0, 16, 16, 2, BULLET_ANIMATION_TIME, false);
+    bulletType = type;
+    if (type == SLOW_BULLET)
+    {
+        velocity = SLOW_BULLET_SPEED;
+        damage = SLOW_BULLET_DAMAGE;
+        animate = new Animation(0, 0, 16, 16, 2, SLOW_BULLET_ANIMATION_TIME, false);
+    }   
+    else if (type == FAST_BULLET)
+    {
+        animate = new Animation(0, 0, 16, 16, 1, SLOW_BULLET_ANIMATION_TIME, false);
+        damage = FAST_BULLET_DAMAGE;
+        velocity = FAST_BULLET_SPEED;
+    }
     dest = {xPos, yPos, BULLET_SIZE, BULLET_SIZE};
     isActive = true;
 }
@@ -37,5 +48,9 @@ void Bullet::update()
 
 void Bullet::render()
 {
-    AssetManager::getInstance()->draw("playerBullet", animate->getSrcRect(), dest);
+    if (bulletType == SLOW_BULLET)
+        AssetManager::getInstance()->draw("slowBullet", animate->getSrcRect(), dest);
+    else {
+        AssetManager::getInstance()->draw("fastBullet", {0,0,16,16}, dest);
+    }
 }

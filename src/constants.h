@@ -11,7 +11,6 @@
 #define PLAYER_SPEED 300
 #define PLAYER_SIZE 32
 #define PLAYER_BOOSTER_TIME 0.3f
-#define PLAYER_SHOOT_DELAY 0.2f
 #define PLAYER_HP 3
 
 // Direction define
@@ -21,6 +20,13 @@
 #define MOVE_DOWN 4
 
 // Bullet setting
-#define BULLET_SPEED 600
+#define SLOW_BULLET 0
+#define SLOW_BULLET_DELAY 0.8f
+#define SLOW_BULLET_ANIMATION_TIME 0.8f
+#define SLOW_BULLET_SPEED 300
+#define SLOW_BULLET_DAMAGE 3
+#define FAST_BULLET 1    
+#define FAST_BULLET_DELAY 0.2f
+#define FAST_BULLET_DAMAGE 1
+#define FAST_BULLET_SPEED 600
 #define BULLET_SIZE 32
-#define BULLET_ANIMATION_TIME 0.8f

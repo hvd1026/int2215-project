@@ -92,7 +92,7 @@ void GameManager::update()
 {
     background->update();
     player->update();
-    std::cout << player->bullets.size() << std::endl;
+    // std::cout << player->bullets.size() << std::endl;
 }
 void GameManager::render()
 {
