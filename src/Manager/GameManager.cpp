@@ -5,6 +5,7 @@
 #include "GameManager.h"
 #include "TimeManager.h"
 #include "AssetManager.h"
+#include "EventManager.h"
 #include "../constants.h"
 
 // Background
@@ -75,6 +76,12 @@ void GameManager::event()
     case SDL_QUIT:
         running = 0;
         break;
+    case SDL_KEYDOWN:
+        EventManager::getInstance()->onKeyDown();
+        break;
+    case SDL_KEYUP:
+        EventManager::getInstance()->onKeyUp();
+        break;
     default:
         break;
     }
@@ -103,6 +110,9 @@ void GameManager::clean()
     timer = NULL;
 
     AssetManager::getInstance()->clean();
+
+    EventManager::getInstance()->clean();
+    
     delete background;
     delete player;
     SDL_DestroyWindow(window);

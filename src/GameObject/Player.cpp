@@ -2,6 +2,7 @@
 #include "../constants.h"
 #include "../Manager/AssetManager.h"
 #include "../Manager/TimeManager.h"
+#include "../Manager/EventManager.h"
 
 #include <string>
 
@@ -10,7 +11,7 @@ Player::Player(int x, int y)
     xPos = x;
     yPos = y;
     velocity = PLAYER_SPEED;
-    state = 2;
+    state = 0;
 
     // Src rect
     boosterAnimation = new Animation(0, 0, 16, 16, 2, PLAYER_BOOSTER_TIME, true); // booster
@@ -33,7 +34,25 @@ void Player::update()
 {
     boosterAnimation->update();
     // listen even => move and shoot
-
+    state = 0;
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT))
+    {
+        xPos -= velocity * TimeManager::getInstance()->getDeltaTime();
+        state = 1;
+    }
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_RIGHT))
+    {
+        xPos += velocity * TimeManager::getInstance()->getDeltaTime();
+        state = 2;
+    }
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_UP))
+    {
+        yPos -= velocity * TimeManager::getInstance()->getDeltaTime();
+    }
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_DOWN))
+    {
+        yPos += velocity * TimeManager::getInstance()->getDeltaTime();
+    }
 
 
     // update dest rect
