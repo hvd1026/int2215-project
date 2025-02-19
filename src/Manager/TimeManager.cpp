@@ -5,6 +5,8 @@ TimeManager *TimeManager::instance = NULL;
 TimeManager::TimeManager()
 {
     reset();
+    elapsedTime = 0;
+    deltaTime = 0;
 }
 
 TimeManager::~TimeManager()
@@ -23,8 +25,6 @@ TimeManager *TimeManager::getInstance()
 void TimeManager::reset()
 {
     startTime = SDL_GetTicks();
-    elapsedTime = 0;
-    deltaTime = 0;
 }
 
 void TimeManager::update()
