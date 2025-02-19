@@ -22,4 +22,5 @@ public:
     void update();
     void render();
     void shoot();
+    bool moveOutOfScreen(int direction);
 };

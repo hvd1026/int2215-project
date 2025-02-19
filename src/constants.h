@@ -14,6 +14,12 @@
 #define PLAYER_SHOOT_DELAY 0.2f
 #define PLAYER_HP 3
 
+// Direction define
+#define MOVE_LEFT 1
+#define MOVE_RIGHT 2
+#define MOVE_UP 3
+#define MOVE_DOWN 4
+
 // Bullet setting
 #define BULLET_SPEED 500
 #define BULLET_SIZE 8

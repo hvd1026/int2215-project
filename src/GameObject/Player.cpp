@@ -41,22 +41,26 @@ void Player::update()
     shootTimeCounter += TimeManager::getInstance()->getDeltaTime();
     // listen even => move and shoot
     state = 0;
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT))
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT) && !moveOutOfScreen(MOVE_LEFT))
     {
+        // left
         xPos -= velocity * TimeManager::getInstance()->getDeltaTime();
         state = 1;
     }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_RIGHT))
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_RIGHT) && !moveOutOfScreen(MOVE_RIGHT))
     {
+        // right
         xPos += velocity * TimeManager::getInstance()->getDeltaTime();
         state = 2;
     }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_UP))
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_UP) && !moveOutOfScreen(MOVE_UP))
     {
+        // up
         yPos -= velocity * TimeManager::getInstance()->getDeltaTime();
     }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_DOWN))
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_DOWN) && !moveOutOfScreen(MOVE_DOWN))
     {
+        // down
         yPos += velocity * TimeManager::getInstance()->getDeltaTime();
     }
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE))
@@ -87,4 +91,42 @@ void Player::render()
 void Player::shoot()
 {
     std::cout << "Pew pew" << std::endl;
+}
+
+bool Player::moveOutOfScreen(int direction)
+{
+
+    switch (direction)
+    {
+    case MOVE_RIGHT:
+        // right:
+        if (xPos + velocity * TimeManager::getInstance()->getDeltaTime() + PLAYER_SIZE >= SCREEN_WIDTH)
+        {
+            return true;
+        }
+        break;
+    case MOVE_LEFT:
+        // left:
+        if (xPos - velocity * TimeManager::getInstance()->getDeltaTime() <= 0)
+        {
+            return true;
+        }
+        break;
+    case MOVE_UP:
+        // up:
+        if (yPos - velocity * TimeManager::getInstance()->getDeltaTime() <= 0)
+        {
+            return true;
+        }
+        break;
+    case MOVE_DOWN:
+        // down:
+        if (yPos + velocity * TimeManager::getInstance()->getDeltaTime() + PLAYER_SIZE >= SCREEN_HEIGHT)
+        {
+            return true;
+        }
+        break;
+    }
+
+    return false;
 }
