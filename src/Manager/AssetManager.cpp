@@ -8,7 +8,15 @@ AssetManager* AssetManager::sInstance = nullptr;
 
 void AssetManager::loadAllTextures()
 {
-    loadTexture("background", "assets/BG.png");
+    loadTexture("bg1", "assets/BG/1.png");
+    loadTexture("bg2", "assets/BG/2.png");
+    loadTexture("bg3", "assets/BG/3.png");
+    loadTexture("bg4", "assets/BG/4.png");
+    loadTexture("bg5", "assets/BG/5.png");
+    loadTexture("bg6", "assets/BG/6.png");
+    loadTexture("bg7", "assets/BG/7.png");
+    loadTexture("bg8", "assets/BG/8.png");
+
 }
 
 

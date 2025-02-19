@@ -1,6 +1,6 @@
 all: build run
 
-FILES = src/Manager/GameManager.cpp src/Manager/TimeManager.cpp src/Manager/AssetManager.cpp src/Animation/Animation.cpp
+FILES = src/Manager/GameManager.cpp src/Manager/TimeManager.cpp src/Manager/AssetManager.cpp src/Animation/Animation.cpp src/GameObject/Background.cpp
 
 build:
 	g++ -o main.exe \
