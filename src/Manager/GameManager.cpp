@@ -52,7 +52,9 @@ void GameManager::init()
         std::cerr << "[ERROR]: " << SDL_GetError() << std::endl;
     }
     std::cout << "[INFO]: Game started successfully" << std::endl;
-
+    // favicon
+    favicon = IMG_Load("assets/UI/Player_life_icon.png");
+    SDL_SetWindowIcon(window, favicon);
     // timer
     timer = TimeManager::getInstance();
 
@@ -89,6 +91,9 @@ void GameManager::render()
 
 void GameManager::clean()
 {
+    SDL_FreeSurface(favicon);
+    favicon = NULL;
+
     timer->clean();
     timer = NULL;
 
