@@ -8,6 +8,7 @@ AssetManager* AssetManager::sInstance = nullptr;
 
 void AssetManager::loadAllTextures()
 {
+    // Backgrounds
     loadTexture("bg1", "assets/BG/1.png");
     loadTexture("bg2", "assets/BG/2.png");
     loadTexture("bg3", "assets/BG/3.png");
@@ -16,7 +17,12 @@ void AssetManager::loadAllTextures()
     loadTexture("bg6", "assets/BG/6.png");
     loadTexture("bg7", "assets/BG/7.png");
     loadTexture("bg8", "assets/BG/8.png");
-
+    // Player
+    loadTexture("player", "assets/Ship/Player_ship.png");
+    loadTexture("booster0", "assets/Ship/Boosters.png");
+    loadTexture("booster1", "assets/Ship/Boosters_left.png");
+    loadTexture("booster2", "assets/Ship/Boosters_right.png");
+    
 }
 
 

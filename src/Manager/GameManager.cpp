@@ -7,9 +7,12 @@
 #include "AssetManager.h"
 #include "../constants.h"
 
-#include "../GameObject/Background.h"
 // Background
+#include "../GameObject/Background.h"
 Background *background = new Background();
+// Player
+#include "../GameObject/Player.h"
+Player *player = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100);
 
 GameManager::GameManager()
 {
@@ -80,12 +83,14 @@ void GameManager::event()
 void GameManager::update()
 {
     background->update();
+    player->update();
 }
 void GameManager::render()
 {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     background->render();
+    player->render();
     SDL_RenderPresent(renderer);
 }
 
@@ -99,7 +104,7 @@ void GameManager::clean()
 
     AssetManager::getInstance()->clean();
     delete background;
-
+    delete player;
     SDL_DestroyWindow(window);
     window = NULL;
     SDL_DestroyRenderer(renderer);
