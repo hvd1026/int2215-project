@@ -22,6 +22,8 @@ void AssetManager::loadAllTextures()
     loadTexture("booster0", "assets/Ship/Boosters.png");
     loadTexture("booster1", "assets/Ship/Boosters_left.png");
     loadTexture("booster2", "assets/Ship/Boosters_right.png");
+    // Bullets
+    loadTexture("playerBullet", "assets/Bullets/player_bullet.png");
     
 }
 

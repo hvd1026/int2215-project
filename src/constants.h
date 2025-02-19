@@ -21,6 +21,6 @@
 #define MOVE_DOWN 4
 
 // Bullet setting
-#define BULLET_SPEED 500
-#define BULLET_SIZE 8
+#define BULLET_SPEED 600
+#define BULLET_SIZE 32
 #define BULLET_ANIMATION_TIME 0.8f

@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Bullet.h"
 #include "../constants.h"
 #include "../Manager/AssetManager.h"
 #include "../Manager/TimeManager.h"
@@ -7,6 +8,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+
+std::vector<Bullet *> bullets;
 
 Player::Player(int x, int y)
 {
@@ -33,6 +36,20 @@ Player::~Player()
 {
     delete boosterAnimation;
     boosterAnimation = NULL;
+    for (auto it = bullets.begin(); it != bullets.end();)
+    {
+        (*it)->update();
+        if (!(*it)->isActive)
+        {
+            std::cout << "delete bullet" << std::endl;
+            delete *it;
+            it = bullets.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 void Player::update()
@@ -63,12 +80,27 @@ void Player::update()
         // down
         yPos += velocity * TimeManager::getInstance()->getDeltaTime();
     }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE))
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_X))
     {
         if (shootTimeCounter >= delayTime)
         {
             shoot();
             shootTimeCounter = 0.0f;
+        }
+    }
+
+    // bullets
+    for (auto it = bullets.begin(); it != bullets.end();)
+    {
+        (*it)->update();
+        if (!(*it)->isActive)
+        {
+            delete *it;
+            it = bullets.erase(it);
+        }
+        else
+        {
+            ++it;
         }
     }
 
@@ -83,6 +115,12 @@ void Player::render()
 {
     std::string booster = "booster" + std::to_string(state);
 
+    // bullets
+    for (auto it = bullets.begin(); it != bullets.end();it++)
+    {
+        (*it)->render();
+    }
+
     // Render ship and booster
     AssetManager::getInstance()->draw("player", src[state], shipDest);
     AssetManager::getInstance()->draw(booster, boosterAnimation->getSrcRect(), boosterDest);
@@ -90,7 +128,7 @@ void Player::render()
 
 void Player::shoot()
 {
-    std::cout << "Pew pew" << std::endl;
+    bullets.push_back(new Bullet(xPos + PLAYER_SIZE / 2 - BULLET_SIZE / 2, yPos));
 }
 
 bool Player::moveOutOfScreen(int direction)
