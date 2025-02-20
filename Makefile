@@ -1,6 +1,6 @@
 all: build run
 
-FILES = src/GameObject/Bullet.cpp src/Manager/EventManager.cpp src/GameObject/Player.cpp src/Manager/GameManager.cpp src/Manager/TimeManager.cpp src/Manager/AssetManager.cpp src/Animation/Animation.cpp src/GameObject/Background.cpp
+FILES = src/GameObject/Enemy.cpp src/GameObject/Bullet.cpp src/Manager/EventManager.cpp src/GameObject/Player.cpp src/Manager/GameManager.cpp src/Manager/TimeManager.cpp src/Manager/AssetManager.cpp src/Animation/Animation.cpp src/GameObject/Background.cpp
 
 build:
 	g++ -o main.exe \

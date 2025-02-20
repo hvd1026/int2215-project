@@ -15,6 +15,16 @@ Background *background = new Background();
 #include "../GameObject/Player.h"
 Player *player = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100);
 #include <vector>
+// Bullets Manager
+#include "../GameObject/Bullet.h"
+
+// test: enemy
+#include "../GameObject/Enemy.h"
+Enemy *en1 = new Enemy("alan", 100, 100, 100);
+Enemy *en2 = new Enemy("bonbon", 200, 100, 1);
+Enemy *en3 = new Enemy("lips", 100, 300, 1);
+
+
 
 GameManager::GameManager()
 {
@@ -62,6 +72,8 @@ void GameManager::init()
     SDL_SetWindowIcon(window, favicon);
     // timer
     timer = TimeManager::getInstance();
+    // bullets
+    BulletManager::getInstance();
 
     // asset manager
     AssetManager::getInstance()->setRenderer(renderer);
@@ -92,7 +104,11 @@ void GameManager::update()
 {
     background->update();
     player->update();
-    // std::cout << player->bullets.size() << std::endl;
+    en1->update();
+    en2->update();
+    en3->update();
+    BulletManager::getInstance()->update();
+    std::cout << BulletManager::getInstance()->getBullets().size() << std::endl;
 }
 void GameManager::render()
 {
@@ -100,6 +116,10 @@ void GameManager::render()
     SDL_RenderClear(renderer);
     background->render();
     player->render();
+    en1->render();
+    en2->render();
+    en3->render();
+    BulletManager::getInstance()->render();
     SDL_RenderPresent(renderer);
 }
 
@@ -112,7 +132,7 @@ void GameManager::clean()
     timer = NULL;
 
     AssetManager::getInstance()->clean();
-
+    BulletManager::getInstance()->clean();
     EventManager::getInstance()->clean();
     
     delete background;

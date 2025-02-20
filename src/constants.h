@@ -30,3 +30,8 @@
 #define FAST_BULLET_DAMAGE 1
 #define FAST_BULLET_SPEED 600
 #define BULLET_SIZE 32
+
+// Enemy setting
+#define ENEMY_SPEED_SLOW 10.0f
+#define ENEMY_SPEED_FAST 25.0f
+#define ENEMY_ANIMATION_DURATION 0.8f

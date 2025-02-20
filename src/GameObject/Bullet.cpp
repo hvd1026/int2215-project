@@ -5,6 +5,9 @@
 #include "../constants.h"
 #include <SDL.h>
 #include <iostream>
+#include <vector>
+BulletManager* BulletManager::instance = nullptr;
+std::vector<Bullet*> BulletManager::bullets;
 
 Bullet::Bullet(int x, int y, int type)
 {
@@ -29,6 +32,7 @@ Bullet::Bullet(int x, int y, int type)
 
 Bullet::~Bullet()
 {
+    // std::cout << "[INFO]: Bullet removed" << std::endl;
     delete animate;
     animate = NULL;
 }
