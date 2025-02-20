@@ -5,11 +5,16 @@
 #include "GameManager.h"
 #include "TimeManager.h"
 #include "AssetManager.h"
+#include "EventManager.h"
 #include "../constants.h"
 
-#include "../GameObject/Background.h"
 // Background
+#include "../GameObject/Background.h"
 Background *background = new Background();
+// Player
+#include "../GameObject/Player.h"
+Player *player = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100);
+#include <vector>
 
 GameManager::GameManager()
 {
@@ -52,7 +57,9 @@ void GameManager::init()
         std::cerr << "[ERROR]: " << SDL_GetError() << std::endl;
     }
     std::cout << "[INFO]: Game started successfully" << std::endl;
-
+    // favicon
+    favicon = IMG_Load("assets/UI/Player_life_icon.png");
+    SDL_SetWindowIcon(window, favicon);
     // timer
     timer = TimeManager::getInstance();
 
@@ -70,6 +77,12 @@ void GameManager::event()
     case SDL_QUIT:
         running = 0;
         break;
+    case SDL_KEYDOWN:
+        EventManager::getInstance()->onKeyDown();
+        break;
+    case SDL_KEYUP:
+        EventManager::getInstance()->onKeyUp();
+        break;
     default:
         break;
     }
@@ -78,23 +91,32 @@ void GameManager::event()
 void GameManager::update()
 {
     background->update();
+    player->update();
+    // std::cout << player->bullets.size() << std::endl;
 }
 void GameManager::render()
 {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     background->render();
+    player->render();
     SDL_RenderPresent(renderer);
 }
 
 void GameManager::clean()
 {
+    SDL_FreeSurface(favicon);
+    favicon = NULL;
+
     timer->clean();
     timer = NULL;
 
     AssetManager::getInstance()->clean();
-    delete background;
 
+    EventManager::getInstance()->clean();
+    
+    delete background;
+    delete player;
     SDL_DestroyWindow(window);
     window = NULL;
     SDL_DestroyRenderer(renderer);
