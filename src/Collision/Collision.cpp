@@ -92,20 +92,23 @@ void Collision::playerVsEnemy(Player *player, Enemy *enemy)
     {
         enemy->isActive = false;
         player->hp -= 1;
-        boom(player->shipDest.x + player->shipDest.w / 2, player->shipDest.y + player->shipDest.h / 2);
+        boom(enemy->m_Rect.x, enemy->m_Rect.y);
+        boom(player->shipDest.x, player->shipDest.y);
     }
 }
 
 void Collision::bulletVsEnemy(Bullet *bullet, Enemy *enemy)
 {
+    SDL_Rect temp = enemy->m_Rect;
+    temp.y -= temp.h / 4; // sicne enemy is smaller than box
     if (bullet->bulletType != ENEMY_BULLET)
-        if (isCollide(bullet->dest, enemy->m_Rect))
+        if (isCollide(bullet->dest, temp))
         {
             bullet->isActive = false;
             enemy->hp -= bullet->damage;
             if (enemy->hp <= 0)
             {
-                boom(enemy->m_Rect.x, enemy->m_Rect.y + enemy->m_Rect.h / 2);
+                boom(enemy->m_Rect.x, enemy->m_Rect.y);
                 enemy->isActive = false;
             }
         }
@@ -118,13 +121,13 @@ void Collision::bulletVsPlayer(Bullet *bullet, Player *player)
         {
             bullet->isActive = false;
             player->hp -= bullet->damage;
-            boom(player->shipDest.x + player->shipDest.w / 2, player->shipDest.y);
+            boom(player->shipDest.x, player->shipDest.y);
         }
 }
 
 void Collision::enemyOutOfScreen(Enemy *enemy)
 {
-    if (enemy->m_Rect.y > SCREEN_HEIGHT)
+    if (enemy->m_Rect.y + enemy->m_Rect.h/2 > SCREEN_HEIGHT)
     {
         m_player->hp -= 1;
         enemy->isActive = false;
