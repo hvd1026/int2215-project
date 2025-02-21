@@ -37,7 +37,6 @@ Enemy::Enemy(std::string name, int x, int y, int _hp)
     else
     {
         // name = lips
-        follow = true;
         m_Animation = new Animation(0, 0, 16, 16, 5, ENEMY_ANIMATION_DURATION, true);
     }
 }

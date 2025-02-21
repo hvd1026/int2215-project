@@ -8,7 +8,6 @@ private:
     std::string m_Name;
     Animation *m_Animation;
     float velocity;
-    bool follow = false;
     float xpos;
     float ypos;
 
