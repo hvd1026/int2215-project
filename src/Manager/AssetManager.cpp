@@ -32,6 +32,11 @@ void AssetManager::loadAllTextures()
     loadTexture("lips", "assets/Enemies/Lips.png");
     // Effect
     loadTexture("boom", "assets/Effects/Explosion.png");
+
+    // Player health
+    loadTexture("playerHealth", "assets/UI/Player_life_icon.png");
+    // Number
+    loadTexture("number", "assets/UI/Number.png");
 }
 
 

@@ -7,6 +7,13 @@
 #define FPS 60
 #define BG_SCROLL 2
 #define BOOM_ANIMATION_TIME 0.8f
+#define SCORE_PER_SECOND 6
+#define BOSS_SPAWN_RATE 10 
+#define BOSS_INCREASE_RATE 1 // per 10 score
+#define MAX_BOSS_SPAWN_RATE 60
+#define ENEMY_SPAWN_TIME 0.6f
+#define ENEMY_SPAM_DECREASE 0.01f // per 100 score
+#define MAX_ENEMY_SPAWN_TIME 0.3f
 
 // Player setting
 #define PLAYER_SPEED 300
