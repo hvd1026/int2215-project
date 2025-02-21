@@ -50,6 +50,7 @@ void GamePage::update()
     BulletManager::getInstance()->update();
     EnemyManager::getInstance()->update();
     spawnEnemy();
+    score += TimeManager::getInstance()->getDeltaTime() * SCORE_PER_SECOND;
 }
 void GamePage::render()
 {
@@ -91,7 +92,6 @@ void GamePage::showPlayerHealth()
 
 void GamePage::showScore()
 {
-    score += TimeManager::getInstance()->getDeltaTime() * SCORE_PER_SECOND;
     int scoreInt = (int)score;
     SDL_Rect dest;
 
