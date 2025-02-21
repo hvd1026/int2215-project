@@ -170,7 +170,7 @@ int GamePage::randomHp(bool isBoos){
     {
         return 10 + (rand() % 11); // from 10 to 20
     }
-    return 1 + rand() % 5; // from 1 to 5
+    return 1 + rand() % 3; // from 1 to 3
 }
 
 int GamePage::randomXPos(){

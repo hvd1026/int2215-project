@@ -52,6 +52,14 @@ void Collision::update()
     {
         bulletVsPlayer(bullet, m_player);
     }
+
+    for (auto bullet1 : BulletManager::getInstance()->getBullets())
+    {
+        for (auto bullet2 : BulletManager::getInstance()->getBullets())
+        {
+            bulletVsBullet(bullet1, bullet2);
+        }
+    }
 }
 
 void Collision::render()
@@ -131,5 +139,15 @@ void Collision::enemyOutOfScreen(Enemy *enemy)
     {
         m_player->hp -= 1;
         enemy->isActive = false;
+    }
+}
+
+void Collision::bulletVsBullet(Bullet *bullet1, Bullet *bullet2)
+{
+    if (isCollide(bullet1->dest, bullet2->dest) && bullet1->bulletType == ENEMY_BULLET && (bullet2->bulletType == SLOW_BULLET || bullet2->bulletType == FAST_BULLET))
+    {
+        bullet1->isActive = false;
+        bullet2->isActive = false;
+        boom(bullet1->dest.x, bullet1->dest.y);
     }
 }

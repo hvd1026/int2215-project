@@ -22,6 +22,7 @@ public:
     void bulletVsEnemy(Bullet *bullet, Enemy *enemy);
     void bulletVsPlayer(Bullet *bullet, Player *player);
     void enemyOutOfScreen(Enemy *enemy);
+    void bulletVsBullet(Bullet *bullet1, Bullet *bullet2);
 
 private:
     Player *m_player;

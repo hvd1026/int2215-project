@@ -12,7 +12,7 @@
 #define BOSS_INCREASE_RATE 1 // per 10 score
 #define MAX_BOSS_SPAWN_RATE 60
 #define ENEMY_SPAWN_TIME 0.6f
-#define ENEMY_SPAM_DECREASE 0.01f // per 100 score
+#define ENEMY_SPAM_DECREASE 0.005f // per 100 score
 #define MAX_ENEMY_SPAWN_TIME 0.3f
 
 // Player setting
@@ -41,10 +41,10 @@
 #define ENEMY_BULLET 2
 #define ENEMY_BULLET_SPEED -100
 #define ENEMY_BULLET_DAMAGE 1
-#define ENEMY_BULLET_DELAY 3.0f
+#define ENEMY_BULLET_DELAY 5.0f
 
 // Enemy setting
 #define ENEMY_SPEED_SLOW 10.0f
 #define ENEMY_SPEED_FAST 25.0f
 #define ENEMY_ANIMATION_DURATION 0.8f
-#define ENEMY_SHOOTING_PERCENTRATE 20
+#define ENEMY_SHOOTING_PERCENTRATE 10
