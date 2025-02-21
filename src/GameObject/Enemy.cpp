@@ -87,5 +87,5 @@ void Enemy::render()
 void Enemy::shoot()
 {
     BulletManager::getInstance()->addBullet(new Bullet(
-        m_Rect.x + m_Rect.w/2, m_Rect.y + m_Rect.h, ENEMY_BULLET));
+        m_Rect.x, m_Rect.y + m_Rect.h, ENEMY_BULLET));
 }
