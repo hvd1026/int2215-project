@@ -8,13 +8,8 @@
 #include "EventManager.h"
 #include "../constants.h"
 
-// Background
-#include "../GameObject/Background.h"
-Background *background = new Background();
-// Player
-#include "../GameObject/Player.h"
-Player *player = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100);
-#include <vector>
+#include "../Pages/GamePage.h"
+GamePage* gamePage = new GamePage();
 
 GameManager::GameManager()
 {
@@ -90,16 +85,12 @@ void GameManager::event()
 
 void GameManager::update()
 {
-    background->update();
-    player->update();
-    // std::cout << player->bullets.size() << std::endl;
+    gamePage->update();
 }
 void GameManager::render()
 {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    background->render();
-    player->render();
+    gamePage->render();
     SDL_RenderPresent(renderer);
 }
 
@@ -108,15 +99,14 @@ void GameManager::clean()
     SDL_FreeSurface(favicon);
     favicon = NULL;
 
+
+    gamePage->clean();
+    delete gamePage;
+
     timer->clean();
     timer = NULL;
-
     AssetManager::getInstance()->clean();
-
     EventManager::getInstance()->clean();
-    
-    delete background;
-    delete player;
     SDL_DestroyWindow(window);
     window = NULL;
     SDL_DestroyRenderer(renderer);

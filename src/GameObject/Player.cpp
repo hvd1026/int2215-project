@@ -9,8 +9,6 @@
 #include <iostream>
 #include <vector>
 
-std::vector<Bullet *> Player::bullets;
-
 Player::Player(int x, int y)
 {
     hp = PLAYER_HP;
@@ -38,20 +36,6 @@ Player::~Player()
 {
     delete boosterAnimation;
     boosterAnimation = NULL;
-    for (auto it = bullets.begin(); it != bullets.end();)
-    {
-        (*it)->update();
-        if (!(*it)->isActive)
-        {
-            std::cout << "delete bullet" << std::endl;
-            delete *it;
-            it = bullets.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
 }
 
 void Player::update()
@@ -99,22 +83,6 @@ void Player::update()
             slowShootCounter = 0.0f;
         }
     }
-
-    // bullets
-    for (auto it = bullets.begin(); it != bullets.end();)
-    {
-        (*it)->update();
-        if (!(*it)->isActive)
-        {
-            delete *it;
-            it = bullets.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
-
     // update dest rect
     boosterDest.x = xPos;
     boosterDest.y = yPos + PLAYER_SIZE;
@@ -125,13 +93,6 @@ void Player::update()
 void Player::render()
 {
     std::string booster = "booster" + std::to_string(state);
-
-    // bullets
-    for (auto it = bullets.begin(); it != bullets.end(); it++)
-    {
-        (*it)->render();
-    }
-
     // Render ship and booster
     AssetManager::getInstance()->draw("player", src[state], shipDest);
     AssetManager::getInstance()->draw(booster, boosterAnimation->getSrcRect(), boosterDest);
@@ -139,7 +100,7 @@ void Player::render()
 
 void Player::shoot(int type)
 {
-    bullets.push_back(new Bullet(xPos + PLAYER_SIZE / 2 - BULLET_SIZE / 2, yPos, type));
+    BulletManager::getInstance()->addBullet(new Bullet(xPos + PLAYER_SIZE / 2 - BULLET_SIZE / 2, yPos, type));
 }
 
 bool Player::moveOutOfScreen(int direction)

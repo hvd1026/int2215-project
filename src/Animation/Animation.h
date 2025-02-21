@@ -15,13 +15,13 @@ private:
     float timePerFrame;
 
     bool loop;
-    bool isFinished;
 
     TimeManager *timer;
 
     SDL_Rect srcRect;
 
 public:
+    bool isFinished;
     Animation(int x, int y, int w, int h, int _frameCount, float _animationDuration, bool _loop);
     ~Animation();
     void update();

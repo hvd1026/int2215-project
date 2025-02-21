@@ -6,6 +6,14 @@
 #define SCREEN_HEIGHT 800
 #define FPS 60
 #define BG_SCROLL 2
+#define BOOM_ANIMATION_TIME 0.8f
+#define SCORE_PER_SECOND 6
+#define BOSS_SPAWN_RATE 10 
+#define BOSS_INCREASE_RATE 1 // per 10 score
+#define MAX_BOSS_SPAWN_RATE 60
+#define ENEMY_SPAWN_TIME 0.6f
+#define ENEMY_SPAM_DECREASE 0.005f // per 100 score
+#define MAX_ENEMY_SPAWN_TIME 0.3f
 
 // Player setting
 #define PLAYER_SPEED 300
@@ -20,6 +28,7 @@
 #define MOVE_DOWN 4
 
 // Bullet setting
+#define BULLET_SIZE 32
 #define SLOW_BULLET 0
 #define SLOW_BULLET_DELAY 0.8f
 #define SLOW_BULLET_ANIMATION_TIME 0.8f
@@ -29,4 +38,13 @@
 #define FAST_BULLET_DELAY 0.2f
 #define FAST_BULLET_DAMAGE 1
 #define FAST_BULLET_SPEED 600
-#define BULLET_SIZE 32
+#define ENEMY_BULLET 2
+#define ENEMY_BULLET_SPEED -100
+#define ENEMY_BULLET_DAMAGE 1
+#define ENEMY_BULLET_DELAY 5.0f
+
+// Enemy setting
+#define ENEMY_SPEED_SLOW 10.0f
+#define ENEMY_SPEED_FAST 25.0f
+#define ENEMY_ANIMATION_DURATION 0.8f
+#define ENEMY_SHOOTING_PERCENTRATE 10

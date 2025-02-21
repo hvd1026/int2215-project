@@ -3,7 +3,6 @@
 #include <SDL.h>
 #include "../Animation/Animation.h"
 #include "Bullet.h"
-#include <vector>
 class Player
 {
 private:
@@ -12,14 +11,13 @@ private:
     int velocity;
     float slowShootDelay, slowShootCounter;
     float fastShootDelay, fastShootCounter;
-    int hp;
     SDL_Rect src[3];
-    SDL_Rect shipDest;
     SDL_Rect boosterDest;
     Animation *boosterAnimation;
 
 public:
-    static std::vector<Bullet* > bullets;
+    int hp;
+    SDL_Rect shipDest;
     Player(int x, int y);
     ~Player();
     void update();
