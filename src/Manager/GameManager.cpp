@@ -18,13 +18,12 @@ Player *player = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100);
 // Bullets Manager
 #include "../GameObject/Bullet.h"
 
-// test: enemy
+// enemy
 #include "../GameObject/Enemy.h"
-Enemy *en1 = new Enemy("alan", 100, 100, 100);
-Enemy *en2 = new Enemy("bonbon", 200, 100, 1);
-Enemy *en3 = new Enemy("lips", 100, 300, 1);
 
-
+// Collision
+#include "../Collision/Collision.h"
+Collision *collision = new Collision(player);
 
 GameManager::GameManager()
 {
@@ -74,6 +73,11 @@ void GameManager::init()
     timer = TimeManager::getInstance();
     // bullets
     BulletManager::getInstance();
+    // enemies
+    EnemyManager::getInstance();
+    EnemyManager::getInstance()->addEnemy(new Enemy("alan", 50, 50,1));
+    EnemyManager::getInstance()->addEnemy(new Enemy("bonbon", 100, 50,10));
+    EnemyManager::getInstance()->addEnemy(new Enemy("lips", 150, 50,2));
 
     // asset manager
     AssetManager::getInstance()->setRenderer(renderer);
@@ -104,11 +108,9 @@ void GameManager::update()
 {
     background->update();
     player->update();
-    en1->update();
-    en2->update();
-    en3->update();
+    EnemyManager::getInstance()->update();
     BulletManager::getInstance()->update();
-    std::cout << BulletManager::getInstance()->getBullets().size() << std::endl;
+    collision->update();
 }
 void GameManager::render()
 {
@@ -116,10 +118,9 @@ void GameManager::render()
     SDL_RenderClear(renderer);
     background->render();
     player->render();
-    en1->render();
-    en2->render();
-    en3->render();
+    EnemyManager::getInstance()->render();
     BulletManager::getInstance()->render();
+    collision->render();
     SDL_RenderPresent(renderer);
 }
 
@@ -131,8 +132,9 @@ void GameManager::clean()
     timer->clean();
     timer = NULL;
 
-    AssetManager::getInstance()->clean();
+    EnemyManager::getInstance()->clean();
     BulletManager::getInstance()->clean();
+    AssetManager::getInstance()->clean();
     EventManager::getInstance()->clean();
     
     delete background;

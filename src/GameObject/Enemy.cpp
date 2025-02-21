@@ -1,12 +1,17 @@
 #include <iostream>
 #include <string>
 #include <SDL.h>
-
+#include <vector>
+#include <cstdlib>
 #include "Enemy.h"
+#include "Bullet.h"
 #include "../Animation/Animation.h"
 #include "../constants.h"
 #include "../Manager/TimeManager.h"
 #include "../Manager/AssetManager.h"
+
+std::vector<Enemy *> EnemyManager::enemies;
+EnemyManager *EnemyManager::instance = nullptr;
 
 Enemy::Enemy(std::string name, int x, int y, int _hp)
 {
@@ -14,6 +19,7 @@ Enemy::Enemy(std::string name, int x, int y, int _hp)
     xpos = x;
     ypos = y;
     hp = _hp;
+    timeCounter = -ENEMY_BULLET_DELAY;
     isActive = true;
     if (hp <= 5)
     {
@@ -47,21 +53,39 @@ Enemy::~Enemy()
     m_Animation = nullptr;
 }
 
-void Enemy::update(){
+void Enemy::update()
+{
+    timeCounter += TimeManager::getInstance()->getDeltaTime();
+    if (timeCounter >= ENEMY_BULLET_DELAY)
+    {
+        int randomValue = rand() % 100 + 1;
+        if (randomValue <= ENEMY_SHOOTING_PERCENTRATE)
+        {
+            shoot();
+        }
+        timeCounter = 0.0f;
+    }
+
     if (isActive)
     {
         ypos += velocity * TimeManager::getInstance()->getDeltaTime();
-        
+
         m_Animation->update();
     }
     m_Rect.x = (int)xpos;
     m_Rect.y = (int)ypos;
 }
 
-void Enemy::render(){
+void Enemy::render()
+{
     if (isActive)
     {
         AssetManager::getInstance()->draw(m_Name, m_Animation->getSrcRect(), m_Rect);
     }
 }
 
+void Enemy::shoot()
+{
+    BulletManager::getInstance()->addBullet(new Bullet(
+        m_Rect.x + m_Rect.w/2, m_Rect.y + m_Rect.h, ENEMY_BULLET));
+}
