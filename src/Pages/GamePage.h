@@ -12,6 +12,7 @@ class GamePage
 {
 public:
     bool gameOver;
+    int lastScore;
     GamePage();
     ~GamePage();
 

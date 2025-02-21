@@ -38,6 +38,12 @@ void GamePage::init()
 }
 void GamePage::update()
 {
+    if (player->hp <= 0)
+    {
+        gameOver = true;
+        lastScore = (int)score;
+        return;
+    }
     background->update();
     player->update();
     collision->update();
