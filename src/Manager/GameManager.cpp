@@ -32,6 +32,7 @@ void GameManager::init()
 {
     currentPage = HOME_PAGE;
     hadBeenInited = false;
+    firstTime = true;
     // Initialize SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
     {
@@ -114,14 +115,16 @@ void GameManager::update()
         if (currentPage == HOME_PAGE)
         {
             homePage = new HomePage();
-            homePage->init(m_highScore);
+            homePage->init(m_highScore, firstTime, recentScore);
         }
 
         hadBeenInited = true;
     }
     // update pages
-    if (currentPage == GAME_PAGE)
+    if (currentPage == GAME_PAGE){
+        firstTime = false;
         gamePage->update();
+    }
     if (currentPage == HOME_PAGE)
         homePage->update();
     // change page
@@ -199,6 +202,7 @@ void GameManager::changePage(int newPage)
     // clean old page
     if (currentPage == GAME_PAGE)
     {
+        recentScore = gamePage->lastScore;
         gamePage->clean();
         delete gamePage;
         gamePage = nullptr;

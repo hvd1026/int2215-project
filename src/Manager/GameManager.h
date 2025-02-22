@@ -27,4 +27,6 @@ private:
     int currentPage;
     bool hadBeenInited;
     int m_highScore;
+    bool firstTime;
+    int recentScore;
 };
