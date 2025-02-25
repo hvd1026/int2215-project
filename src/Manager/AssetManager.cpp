@@ -37,6 +37,11 @@ void AssetManager::loadAllTextures()
     loadTexture("playerHealth", "assets/UI/Player_life_icon.png");
     // Number
     loadTexture("number", "assets/UI/Number.png");
+    // ui
+    loadTexture("highscore", "assets/UI/Highscore.png");
+    loadTexture("press", "assets/UI/press_to_play.png");
+    loadTexture("gameover", "assets/UI/GAME_OVER.png");
+    loadTexture("title", "assets/UI/game_title.png");
 }
 
 

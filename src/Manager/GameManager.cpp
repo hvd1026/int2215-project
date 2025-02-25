@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <fstream>
 
 #include "GameManager.h"
 #include "TimeManager.h"
@@ -9,7 +10,9 @@
 #include "../constants.h"
 
 #include "../Pages/GamePage.h"
-GamePage* gamePage = new GamePage();
+#include "../Pages/HomePage.h"
+GamePage *gamePage;
+HomePage *homePage;
 
 GameManager::GameManager()
 {
@@ -27,6 +30,9 @@ GameManager::~GameManager()
 
 void GameManager::init()
 {
+    currentPage = HOME_PAGE;
+    hadBeenInited = false;
+    firstTime = true;
     // Initialize SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
     {
@@ -61,6 +67,19 @@ void GameManager::init()
     // asset manager
     AssetManager::getInstance()->setRenderer(renderer);
     AssetManager::getInstance()->loadAllTextures();
+
+    // high score
+    // m_highScore = 0;
+    std::ifstream file("highscore.txt");
+    if (file.is_open())
+    {
+        file >> m_highScore;
+        file.close();
+    }
+    else{
+        updateHighScore(0);
+    }
+    
 }
 
 void GameManager::event()
@@ -85,12 +104,51 @@ void GameManager::event()
 
 void GameManager::update()
 {
-    gamePage->update();
+    // init pages
+    if (!hadBeenInited)
+    {
+        if (currentPage == GAME_PAGE)
+        {
+            gamePage = new GamePage();
+            gamePage->init();
+        }
+        if (currentPage == HOME_PAGE)
+        {
+            homePage = new HomePage();
+            homePage->init(m_highScore, firstTime, recentScore);
+        }
+
+        hadBeenInited = true;
+    }
+    // update pages
+    if (currentPage == GAME_PAGE){
+        firstTime = false;
+        gamePage->update();
+    }
+    if (currentPage == HOME_PAGE)
+        homePage->update();
+    // change page
+    if (currentPage == HOME_PAGE && hadBeenInited && homePage->startedGame)
+    {
+        changePage(GAME_PAGE);
+    }
+    if (currentPage == GAME_PAGE && hadBeenInited &&  gamePage->gameOver)
+    {
+        if (gamePage->lastScore > m_highScore)
+        {
+            updateHighScore(gamePage->lastScore);
+        }
+        changePage(HOME_PAGE);
+    }
+
 }
 void GameManager::render()
 {
     SDL_RenderClear(renderer);
-    gamePage->render();
+    if (currentPage == GAME_PAGE && hadBeenInited)
+        gamePage->render();
+    if (currentPage == HOME_PAGE && hadBeenInited)
+        homePage->render();
     SDL_RenderPresent(renderer);
 }
 
@@ -99,9 +157,18 @@ void GameManager::clean()
     SDL_FreeSurface(favicon);
     favicon = NULL;
 
-
-    gamePage->clean();
-    delete gamePage;
+    if (currentPage == GAME_PAGE && hadBeenInited)
+    {
+        gamePage->clean();
+        delete gamePage;
+        gamePage = nullptr;
+    }
+    if (currentPage == HOME_PAGE && hadBeenInited)
+    {
+        homePage->clean();
+        delete homePage;
+        homePage = nullptr;
+    }
 
     timer->clean();
     timer = NULL;
@@ -127,5 +194,38 @@ void GameManager::run()
             render();       // render everything
             timer->reset(); // reset delta time
         }
+    }
+}
+
+void GameManager::changePage(int newPage)
+{
+    // clean old page
+    if (currentPage == GAME_PAGE)
+    {
+        recentScore = gamePage->lastScore;
+        gamePage->clean();
+        delete gamePage;
+        gamePage = nullptr;
+    }
+    if (currentPage == HOME_PAGE)
+    {
+        homePage->clean();
+        delete homePage;
+        homePage = nullptr;
+    }
+
+    // switch to new page
+    currentPage = newPage;
+    hadBeenInited = false;
+}
+
+void GameManager::updateHighScore(int newHighScore)
+{
+    m_highScore = newHighScore;
+    std::ofstream outFile("highscore.txt");
+    if (outFile.is_open())
+    {
+        outFile << m_highScore;
+        outFile.close();
     }
 }

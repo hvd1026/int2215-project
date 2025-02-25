@@ -13,7 +13,7 @@
 
 GamePage::GamePage()
 {
-    init();
+    // init();
 }
 
 GamePage::~GamePage()
@@ -24,7 +24,7 @@ void GamePage::init()
 {
     std::cout << "[INFO]: GamePage loaded" << std::endl;
     background = new Background();
-    player = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100);
+    player = new Player((SCREEN_WIDTH - PLAYER_SIZE) / 2, SCREEN_HEIGHT - 100);
     collision = new Collision(player);
     gameOver = false;
     score = 0.0f;
