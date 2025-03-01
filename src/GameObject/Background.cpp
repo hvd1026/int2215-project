@@ -9,9 +9,10 @@
 Background::Background(){
     tail = 8;
     src = {0, 0, 512, 512};
-    int base_y = 0;
+    float base_y = 0;
     for (int i = 1; i<=8; i++){
-        dest[i] = {0, base_y, SCREEN_WIDTH, SCREEN_HEIGHT};
+        yPos[i] = base_y;
+        dest[i] = {0, (int)yPos[i], SCREEN_WIDTH, SCREEN_HEIGHT};
         base_y -= SCREEN_HEIGHT;
     }
 
@@ -27,9 +28,11 @@ void Background::render(){
 }
 void Background::update(){
     for (int i = 1; i<=8; i++){
-        dest[i].y += scroll;
+        yPos[i] += scroll * TimeManager::getInstance()->getDeltaTime();
+        dest[i].y = (int)yPos[i];
         if (dest[i].y >= SCREEN_HEIGHT){
-            dest[i].y = dest[tail].y - SCREEN_HEIGHT + scroll;
+            yPos[i] = yPos[tail] - SCREEN_HEIGHT + scroll * TimeManager::getInstance()->getDeltaTime();
+            dest[i].y = (int)yPos[i];
             tail = i;
         }
     }

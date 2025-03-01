@@ -11,6 +11,7 @@ public:
 private:
     SDL_Rect src;
     SDL_Rect dest[9];
-    int scroll = BG_SCROLL;
+    float yPos[9];
+    int scroll = BG_SCROLL_SPEED;
     int tail;
 };
