@@ -12,10 +12,9 @@
 Player::Player(int x, int y)
 {
     hp = PLAYER_HP;
-    slowShootDelay = SLOW_BULLET_DELAY;
-    slowShootCounter = SLOW_BULLET_DELAY;
-    fastShootDelay = FAST_BULLET_DELAY;
-    fastShootCounter = FAST_BULLET_DELAY;
+    currentShootType = FAST_BULLET;
+    shootDelay = FAST_BULLET_DELAY;
+    shootTimmer = 0.0f;
     xPos = x;
     yPos = y;
     velocity = PLAYER_SPEED;
@@ -41,8 +40,7 @@ Player::~Player()
 void Player::update()
 {
     boosterAnimation->update();
-    slowShootCounter += TimeManager::getInstance()->getDeltaTime();
-    fastShootCounter += TimeManager::getInstance()->getDeltaTime();
+    shootTimmer += TimeManager::getInstance()->getDeltaTime();
     // listen even => move and shoot
     state = 0;
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT) && !moveOutOfScreen(MOVE_LEFT))
@@ -69,19 +67,20 @@ void Player::update()
     }
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_Z))
     {
-        if (fastShootCounter >= fastShootDelay)
-        {
-            shoot(FAST_BULLET);
-            fastShootCounter = 0.0f;
-        }
+        currentShootType = FAST_BULLET;
+        shootDelay = FAST_BULLET_DELAY;
+        shootTimmer = 0.0f;
     }
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_X))
     {
-        if (slowShootCounter >= slowShootDelay)
-        {
-            shoot(SLOW_BULLET);
-            slowShootCounter = 0.0f;
-        }
+        currentShootType = SLOW_BULLET;
+        shootDelay = SLOW_BULLET_DELAY;
+        shootTimmer = 0.0f;
+    }
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE) && shootTimmer >= shootDelay)
+    {
+        shoot(currentShootType);
+        shootTimmer = 0.0f;
     }
     // update dest rect
     boosterDest.x = xPos;

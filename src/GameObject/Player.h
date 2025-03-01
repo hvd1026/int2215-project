@@ -9,8 +9,8 @@ private:
     int state; // 0 : straight, 1: left, 2: right
     int xPos, yPos;
     int velocity;
-    float slowShootDelay, slowShootCounter;
-    float fastShootDelay, fastShootCounter;
+    float shootDelay, shootTimmer;
+    int currentShootType;
     SDL_Rect src[3];
     SDL_Rect boosterDest;
     Animation *boosterAnimation;
