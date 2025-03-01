@@ -5,7 +5,7 @@
 #define SCREEN_WIDTH 512
 #define SCREEN_HEIGHT 800
 #define FPS 60
-#define BG_SCROLL 2
+#define BG_SCROLL_SPEED 120.0f
 #define BOOM_ANIMATION_TIME 0.8f
 #define SCORE_PER_SECOND 6
 #define BOSS_SPAWN_RATE 10 
