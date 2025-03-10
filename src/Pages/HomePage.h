@@ -5,6 +5,7 @@ private:
     int highScore;
     bool firstTime;
     int recentScore;
+    float timer;
 public:
     bool startedGame;
     HomePage();

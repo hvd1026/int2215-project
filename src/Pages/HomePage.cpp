@@ -2,6 +2,7 @@
 #include "../constants.h"
 #include "../Manager/AssetManager.h"
 #include "../Manager/EventManager.h"
+#include "../Manager/TimeManager.h"
 #include <iostream>
 #include <string>
 HomePage::HomePage()
@@ -18,17 +19,35 @@ void HomePage::init(int _highScore, bool _firstTime, int _recentScore)
     highScore = _highScore;
     firstTime = _firstTime;
     recentScore = _recentScore;
+    timer = 0.0f;
+    startedGame = false;
 }
 void HomePage::clean()
 {
 }
 void HomePage::update()
 {
-    if (
-        EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE))
+    timer += TimeManager::getInstance()->getDeltaTime();
+    if (firstTime)
     {
-        startedGame = true;
+        if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE))
+        {
+            startedGame = true;
+        }
     }
+    else{
+        // when game over, player still press space => need delay
+        if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE) && timer > 1.0f)
+        {
+            startedGame = true;
+        }
+    }
+
+    if (timer > 100.0f) // prevent overflow
+    {
+        timer = 0.0f;
+    }
+
 }
 void HomePage::render()
 {

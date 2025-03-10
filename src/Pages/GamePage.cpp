@@ -125,11 +125,11 @@ void GamePage::spawnEnemy()
     {
         if (randomIsBoss()){
             EnemyManager::getInstance()->addEnemy(new Enemy(
-                randomEnemyName(), randomXPos(), -64, randomHp(true)
+                randomEnemyName(), randomXPos(), -64, randomHp()
             ));
         }else{
             EnemyManager::getInstance()->addEnemy(new Enemy(
-                randomEnemyName(), randomXPos(), -32, randomHp(false)
+                randomEnemyName(), randomXPos(), -32, 1
             ));
         }
         timmer = 0.0f;   
@@ -171,12 +171,8 @@ bool GamePage::randomIsBoss(){
     return false;
 }
 
-int GamePage::randomHp(bool isBoos){
-    if (isBoos)
-    {
-        return 10 + (rand() % 11); // from 10 to 20
-    }
-    return 1 + rand() % 3; // from 1 to 3
+int GamePage::randomHp(){
+    return 10 + (rand() % 11);
 }
 
 int GamePage::randomXPos(){
