@@ -21,7 +21,7 @@ Enemy::Enemy(std::string name, int x, int y, int _hp)
     hp = _hp;
     timeCounter = -ENEMY_BULLET_DELAY;
     isActive = true;
-    if (hp <= 5)
+    if (hp ==  1)
     {
         m_Rect = {(int)xpos, (int)ypos, 32, 32};
         velocity = ENEMY_SPEED_FAST;

@@ -39,7 +39,7 @@ private:
 
     std::string randomEnemyName();
     bool randomIsBoss();
-    int randomHp(bool isBoos);
+    int randomHp();
     int randomXPos();
 };
 
