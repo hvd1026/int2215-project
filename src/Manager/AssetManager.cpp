@@ -42,6 +42,7 @@ void AssetManager::loadAllTextures()
     loadTexture("press", "assets/UI/press_to_play.png");
     loadTexture("gameover", "assets/UI/GAME_OVER.png");
     loadTexture("title", "assets/UI/game_title.png");
+    loadTexture("frame", "assets/UI/frame.png");
 }
 
 

@@ -60,6 +60,12 @@ void GamePage::render()
     player->render();
     collision->render();
 
+
+    //render list bullet
+    AssetManager::getInstance()->draw("frame", {0,0,512,512}, {10-8, SCREEN_HEIGHT - 50-8, 48, 48});
+    AssetManager::getInstance()->draw("fastBullet", {0,0,16,16}, {10, SCREEN_HEIGHT - 50, 32, 32});
+    AssetManager::getInstance()->draw("frame", {0,0,512,512}, {SCREEN_WIDTH - 10 - 48+8, SCREEN_HEIGHT - 50-8, 48, 48});
+    AssetManager::getInstance()->draw("slowBullet", {16,0,16,16}, {SCREEN_WIDTH - 10 - 32, SCREEN_HEIGHT - 50, 32, 32});
     showPlayerHealth();
     showScore();
 }
