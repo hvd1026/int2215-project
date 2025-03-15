@@ -42,6 +42,8 @@ void AssetManager::loadAllTextures()
     loadTexture("press", "assets/UI/press_to_play.png");
     loadTexture("gameover", "assets/UI/GAME_OVER.png");
     loadTexture("title", "assets/UI/game_title.png");
+    loadTexture("frame", "assets/UI/frame.png");
+    loadTexture("zx", "assets/UI/zx.png"); // 88x43=> 44x43
 }
 
 
