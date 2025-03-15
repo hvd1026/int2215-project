@@ -1,10 +1,10 @@
+#include "AssetManager.h"
 #include <SDL.h>
 #include <SDL_image.h>
-#include <string>
 #include <iostream>
-#include "AssetManager.h"
+#include <string>
 
-AssetManager* AssetManager::sInstance = nullptr;
+AssetManager *AssetManager::sInstance = nullptr;
 
 void AssetManager::loadAllTextures()
 {
@@ -22,37 +22,33 @@ void AssetManager::loadAllTextures()
     loadTexture("booster0", "assets/Ship/Boosters.png");
     loadTexture("booster1", "assets/Ship/Boosters_left.png");
     loadTexture("booster2", "assets/Ship/Boosters_right.png");
-    // Bullets
-    loadTexture("fastBullet", "assets/Bullets/fast_bullet.png");
-    loadTexture("slowBullet", "assets/Bullets/slow_bullet.png"); 
-    loadTexture("enemyBullet", "assets/Bullets/enemy_bullet.png");
+    loadTexture("playerHealth", "assets/UI/Player_life_icon.png");
     // Enemies
     loadTexture("alan", "assets/Enemies/Alan.png");
-    loadTexture("bonbon", "assets/Enemies/Bon_Bon.png");   
+    loadTexture("bonbon", "assets/Enemies/Bon_Bon.png");
     loadTexture("lips", "assets/Enemies/Lips.png");
+    // Bullets
+    loadTexture("fastBullet", "assets/Bullets/fast_bullet.png");
+    loadTexture("slowBullet", "assets/Bullets/slow_bullet.png");
+    loadTexture("enemyBullet", "assets/Bullets/enemy_bullet.png");
     // Effect
     loadTexture("boom", "assets/Effects/Explosion.png");
-
-    // Player health
-    loadTexture("playerHealth", "assets/UI/Player_life_icon.png");
-    // Number
-    loadTexture("number", "assets/UI/Number.png");
     // ui
+    loadTexture("number", "assets/UI/Number.png");
     loadTexture("highscore", "assets/UI/Highscore.png");
     loadTexture("press", "assets/UI/press_to_play.png");
     loadTexture("gameover", "assets/UI/GAME_OVER.png");
     loadTexture("title", "assets/UI/game_title.png");
     loadTexture("frame", "assets/UI/frame.png");
-    loadTexture("zx", "assets/UI/zx.png"); // 88x43=> 44x43
+    loadTexture("zx", "assets/UI/zx.png"); 
 }
-
 
 AssetManager::AssetManager()
 {
     mRenderer = nullptr;
 }
 
-AssetManager* AssetManager::getInstance()
+AssetManager *AssetManager::getInstance()
 {
     if (sInstance == nullptr)
     {
@@ -62,7 +58,7 @@ AssetManager* AssetManager::getInstance()
     return sInstance;
 }
 
-void AssetManager::setRenderer(SDL_Renderer* renderer)
+void AssetManager::setRenderer(SDL_Renderer *renderer)
 {
     mRenderer = renderer;
 }
@@ -79,19 +75,13 @@ void AssetManager::draw(std::string id, SDL_Rect src, SDL_Rect dest, SDL_Rendere
         std::cerr << "[ERROR]: Texture " << id << " not found" << std::endl;
         return;
     }
-    SDL_RenderCopyEx(mRenderer, mTextures[id], &src, &dest, 0, NULL, flip);
-}
-
-void AssetManager::dropTexture(std::string id)
-{
-    SDL_DestroyTexture(mTextures[id]);
-    mTextures.erase(id);
+    SDL_RenderCopyEx(mRenderer, mTextures[id], &src, &dest, 0, NULL, flip = SDL_FLIP_NONE);
 }
 
 void AssetManager::clean()
 {
     std::cout << "[INFO]: AssetManager destroyed" << std::endl;
-    for (auto const& i : mTextures)
+    for (auto const &i : mTextures)
     {
         SDL_DestroyTexture(i.second);
     }

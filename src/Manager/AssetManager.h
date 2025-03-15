@@ -16,9 +16,6 @@ class AssetManager
         void setRenderer(SDL_Renderer* renderer);
         void loadTexture(std::string id, std::string path);
         void loadAllTextures();
-
         void draw(std::string id, SDL_Rect src, SDL_Rect dest, SDL_RendererFlip flip = SDL_FLIP_NONE);
-
-        void dropTexture(std::string id);
         void clean();
 };
