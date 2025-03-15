@@ -11,10 +11,12 @@
 
 Player::Player(int x, int y)
 {
-    hp = PLAYER_HP;
+    // bullet
     currentShootType = FAST_BULLET;
     shootDelay = FAST_BULLET_DELAY;
-    shootTimmer = 0.0f;
+    // player properties
+    hp = PLAYER_HP;
+    shootTimer = 0.0f;
     xPos = x;
     yPos = y;
     velocity = PLAYER_SPEED;
@@ -40,9 +42,9 @@ Player::~Player()
 void Player::update()
 {
     boosterAnimation->update();
-    shootTimmer += TimeManager::getInstance()->getDeltaTime();
+    shootTimer += TimeManager::getInstance()->getDeltaTime();
     // listen even => move and shoot
-    state = 0;
+    state = 0; // move direction state
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT) && !moveOutOfScreen(MOVE_LEFT))
     {
         // left
@@ -65,22 +67,10 @@ void Player::update()
         // down
         yPos += velocity * TimeManager::getInstance()->getDeltaTime();
     }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_Z))
-    {
-        currentShootType = FAST_BULLET;
-        shootDelay = FAST_BULLET_DELAY;
-        shootTimmer = 0.0f;
-    }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_X))
-    {
-        currentShootType = SLOW_BULLET;
-        shootDelay = SLOW_BULLET_DELAY;
-        shootTimmer = 0.0f;
-    }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE) && shootTimmer >= shootDelay)
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE) && shootTimer >= shootDelay)
     {
         shoot(currentShootType);
-        shootTimmer = 0.0f;
+        shootTimer = 0.0f;
     }
     // update dest rect
     boosterDest.x = xPos;
