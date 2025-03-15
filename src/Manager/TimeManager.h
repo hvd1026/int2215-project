@@ -1,7 +1,6 @@
 #pragma once
 #include <SDL.h>
 
-// unique, accessible
 class TimeManager
 {
 private:
