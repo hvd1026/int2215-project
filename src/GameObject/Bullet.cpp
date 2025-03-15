@@ -14,24 +14,10 @@ Bullet::Bullet(int x, int y, int type)
     xPos = x;
     yPos = y;
     bulletType = type;
-    if (type == SLOW_BULLET)
-    {
-        velocity = SLOW_BULLET_SPEED;
-        damage = SLOW_BULLET_DAMAGE;
-        animate = new Animation(0, 0, 16, 16, 2, SLOW_BULLET_ANIMATION_TIME, false);
-    }
-    else if (type == FAST_BULLET)
-    {
-        animate = new Animation(0, 0, 16, 16, 1, SLOW_BULLET_ANIMATION_TIME, false); // prevent crash when call animate->update()
-        damage = FAST_BULLET_DAMAGE;
-        velocity = FAST_BULLET_SPEED;
-    }
-    else
-    {
-        animate = new Animation(32, 0, 16, 16, 2, SLOW_BULLET_ANIMATION_TIME, false);
-        damage = ENEMY_BULLET_DAMAGE;
-        velocity = ENEMY_BULLET_SPEED;
-    }
+    properties = BulletManager::getInstance()->bulletProperties[type];
+    damage = properties.damage;
+    velocity = properties.velocity;
+    animate = new Animation(0, 0, 16, 16, properties.animationFrames, properties.animationTime, false);
     dest = {xPos, yPos, BULLET_SIZE, BULLET_SIZE};
     isActive = true;
 }
@@ -57,21 +43,20 @@ void Bullet::update()
 
 void Bullet::render()
 {
-    if (bulletType == SLOW_BULLET)
-        AssetManager::getInstance()->draw("slowBullet", animate->getSrcRect(), dest);
-    else if (bulletType == FAST_BULLET)
-    {
-        AssetManager::getInstance()->draw("fastBullet", {0, 0, 16, 16}, dest);
-    }
-    else
-    {
-        AssetManager::getInstance()->draw("enemyBullet", animate->getSrcRect(), dest);
-    }
+    AssetManager::getInstance()->draw(properties.id, animate->getSrcRect(), dest);
 }
 
 // BulletManager
 
-BulletManager::BulletManager() {}
+BulletManager::BulletManager()
+{
+    bulletProperties.resize(BULLET_TYPES_COUNT);
+    bulletProperties[DEFAULT_BULLET] = {"default_bullet", 1, 500.0f, 0.2f, 0.0f, 0.5f, 1};
+    bulletProperties[CHARGED_BULLET] = {"charged_bullet", 10, 250.0f, 0.8f, 20.0f, 1.5f, 2};
+    bulletProperties[CIRCLE_BULLET]  = {"circle_bullet", 3, 300.0f, 0.4f, 20.0f, 2.0f, 4};
+    bulletProperties[SQUARE_BULLET]  = {"square_bullet", 6, 300.0f, 0.5f, 20.0f, 2.0f, 4};
+    bulletProperties[ENEMY_BULLET]   = {"enemy_bullet", 1, -100.0f, 5.0f, 0.0f, 4.0f, 4};
+}
 BulletManager *BulletManager::getInstance()
 {
     if (instance == nullptr)

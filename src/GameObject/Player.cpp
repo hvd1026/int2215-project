@@ -11,9 +11,7 @@
 
 Player::Player(int x, int y)
 {
-    // bullet
-    currentShootType = FAST_BULLET;
-    shootDelay = FAST_BULLET_DELAY;
+    currentShootType = DEFAULT_BULLET;
     // player properties
     hp = PLAYER_HP;
     shootTimer = 0.0f;
@@ -67,7 +65,7 @@ void Player::update()
         // down
         yPos += velocity * TimeManager::getInstance()->getDeltaTime();
     }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE) && shootTimer >= shootDelay)
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE) && shootTimer >= BulletManager::getInstance()->bulletProperties[currentShootType].shootDelay)
     {
         shoot(currentShootType);
         shootTimer = 0.0f;

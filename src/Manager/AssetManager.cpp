@@ -28,9 +28,11 @@ void AssetManager::loadAllTextures()
     loadTexture("bonbon", "assets/Enemies/Bon_Bon.png");
     loadTexture("lips", "assets/Enemies/Lips.png");
     // Bullets
-    loadTexture("fastBullet", "assets/Bullets/fast_bullet.png");
-    loadTexture("slowBullet", "assets/Bullets/slow_bullet.png");
-    loadTexture("enemyBullet", "assets/Bullets/enemy_bullet.png");
+    loadTexture("default_bullet", "assets/Bullets/default_bullet.png");
+    loadTexture("charged_bullet", "assets/Bullets/charged_bullet.png");
+    loadTexture("circle_bullet", "assets/Bullets/circle_bullet.png");
+    loadTexture("square_bullet", "assets/Bullets/square_bullet.png");
+    loadTexture("enemy_bullet", "assets/Bullets/enemy_bullet.png");
     // Effect
     loadTexture("boom", "assets/Effects/Explosion.png");
     // ui

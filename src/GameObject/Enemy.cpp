@@ -19,7 +19,7 @@ Enemy::Enemy(std::string name, int x, int y, int _hp)
     xpos = x;
     ypos = y;
     hp = _hp;
-    timeCounter = -ENEMY_BULLET_DELAY;
+    timeCounter = 0;
     isActive = true;
     if (hp ==  1)
     {
@@ -56,7 +56,7 @@ Enemy::~Enemy()
 void Enemy::update()
 {
     timeCounter += TimeManager::getInstance()->getDeltaTime();
-    if (timeCounter >= ENEMY_BULLET_DELAY)
+    if (timeCounter >= BulletManager::getInstance()->bulletProperties[ENEMY_BULLET].shootDelay)
     {
         int randomValue = rand() % 100 + 1;
         if (randomValue <= ENEMY_SHOOTING_PERCENTRATE)

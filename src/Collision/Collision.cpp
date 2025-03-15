@@ -144,7 +144,7 @@ void Collision::enemyOutOfScreen(Enemy *enemy)
 
 void Collision::bulletVsBullet(Bullet *bullet1, Bullet *bullet2)
 {
-    if (isCollide(bullet1->dest, bullet2->dest) && bullet1->bulletType == ENEMY_BULLET && (bullet2->bulletType == SLOW_BULLET || bullet2->bulletType == FAST_BULLET))
+    if (isCollide(bullet1->dest, bullet2->dest) && bullet1->bulletType == ENEMY_BULLET && (bullet2->bulletType != ENEMY_BULLET))
     {
         bullet1->isActive = false;
         bullet2->isActive = false;
