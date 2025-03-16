@@ -132,9 +132,9 @@ void GameManager::update()
     }
     if (currentPage == GAME_PAGE && hadBeenInited && gamePage->gameOver)
     {
-        if (gamePage->lastScore > m_highScore)
+        if (gamePage->score > m_highScore)
         {
-            updateHighScore(gamePage->lastScore);
+            updateHighScore(gamePage->score);
         }
         changePage(HOME_PAGE);
     }
@@ -181,7 +181,7 @@ void GameManager::changePage(int newPage)
     // clean old page
     if (currentPage == GAME_PAGE)
     {
-        recentScore = gamePage->lastScore;
+        recentScore = gamePage->score;
         gamePage->clean();
         delete gamePage;
         gamePage = nullptr;

@@ -12,7 +12,7 @@ class GamePage
 {
 public:
     bool gameOver;
-    int lastScore;
+    int score;
     GamePage();
     ~GamePage();
 
@@ -26,8 +26,7 @@ public:
     void spawnEnemy();
 
 private:
-    float score;
-    float timmer;
+    float timer;
 
     int bossSpawnRate;
     int lastIncreaseSpawnRate;
