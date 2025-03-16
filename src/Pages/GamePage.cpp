@@ -20,7 +20,7 @@ GamePage::GamePage()
 GamePage::~GamePage()
 {
 }
-Item* test = new Item(100, 100);
+
 void GamePage::init()
 {
     background = new Background();
@@ -48,6 +48,7 @@ void GamePage::update()
     player->update();
     BulletManager::getInstance()->update();
     EnemyManager::getInstance()->update();
+    ItemManager::getInstance()->update();
     collision->update();
     spawnEnemy();
     score += collision->score;
@@ -57,9 +58,9 @@ void GamePage::render()
     background->render();
     BulletManager::getInstance()->render();
     EnemyManager::getInstance()->render();
+    ItemManager::getInstance()->render();
     player->render();
     collision->render(); // only boom effect
-    test->render();
     showPlayerHealth();
     showScore();
 }
@@ -67,6 +68,7 @@ void GamePage::clean()
 {
     EnemyManager::getInstance()->clean();
     BulletManager::getInstance()->clean();
+    ItemManager::getInstance()->clean();
     delete background;
     delete player;
     delete collision;

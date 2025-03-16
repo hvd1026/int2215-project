@@ -2,10 +2,15 @@
 #include <cstdlib>
 #include <SDL.h>
 #include <iostream>
+#include <vector>
 #include "../constants.h"
 #include "../Manager/TimeManager.h"
 #include "../Manager/AssetManager.h"
 #include "Bullet.h"
+
+ItemManager *ItemManager::instance = nullptr;
+std::vector<Item *> ItemManager::items;
+
 Item::Item(int x, int y)
 {
     xpos = x;
@@ -19,7 +24,13 @@ Item::Item(int x, int y)
 
 void Item::update()
 {
-    // update pos here
+    ypos += velocity * TimeManager::getInstance()->getDeltaTime();
+    bubbleDest.y = (int)ypos;
+    itemRect.y = bubbleDest.y + 4;
+    if (ypos > SCREEN_HEIGHT)
+    {
+        isPickedUp = true;
+    }
 }
 
 void Item::render()
@@ -34,10 +45,64 @@ void Item::render()
 
 int Item::randomType()
 {
-    srand(time(0)); // Seed the random number generator
     int randNum = rand() % 5 + 1;
     if (randNum == 4) { // 4 is ENEMY_BULLET
         randNum = 0;
     }
     return randNum;
+}
+
+ItemManager::ItemManager()
+{
+}
+
+ItemManager *ItemManager::getInstance()
+{
+    if (instance == nullptr)
+    {
+        instance = new ItemManager();
+    }
+    return instance;
+}
+void ItemManager::update()
+{
+    for (auto it = items.begin(); it != items.end(); it++)
+    {
+        (*it)->update();
+        if ((*it)->isPickedUp)
+        {
+            delete (*it);
+            items.erase(it);
+            it--;
+        }
+    }
+}
+
+void ItemManager::render()
+{
+    for (auto it = items.begin(); it != items.end(); it++)
+    {
+        (*it)->render();
+    }
+}
+
+void ItemManager::clean()
+{
+    for (auto item : items)
+    {
+        delete item;
+    }
+    items.clear();
+    delete instance;
+    instance = nullptr;
+}
+
+void ItemManager::addItem(Item *item)
+{
+    items.push_back(item);
+}
+
+std::vector<Item *> ItemManager::getItems()
+{
+    return items;
 }

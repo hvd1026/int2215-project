@@ -9,6 +9,7 @@
 #include "../constants.h"
 #include "../Manager/TimeManager.h"
 #include "../Manager/AssetManager.h"
+#include "Item.h"
 
 std::vector<Enemy *> EnemyManager::enemies;
 EnemyManager *EnemyManager::instance = nullptr;
@@ -51,6 +52,11 @@ Enemy::~Enemy()
 {
     delete m_Animation;
     m_Animation = nullptr;
+    // spawm item when enemy is destroyed
+    if (rand() % 100 + 1 <= ITEM_SPAWN_RATE)
+    {
+        ItemManager::getInstance()->addItem(new Item(m_Rect.x, m_Rect.y));
+    }
 }
 
 void Enemy::update()
