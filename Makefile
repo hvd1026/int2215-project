@@ -14,6 +14,7 @@ FILES := \
     src/Manager/AssetManager.cpp \
     src/Animation/Animation.cpp \
     src/GameObject/Background.cpp \
+    src/GameObject/Item.cpp \
     src/main.cpp
 
 # Detect OS

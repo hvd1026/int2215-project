@@ -10,6 +10,7 @@
 #include "../GameObject/Background.h"
 #include "../GameObject/Bullet.h"
 #include "../GameObject/Enemy.h"
+#include "../GameObject/Item.h"
 
 GamePage::GamePage()
 {
@@ -19,7 +20,7 @@ GamePage::GamePage()
 GamePage::~GamePage()
 {
 }
-
+Item* test = new Item(100, 100);
 void GamePage::init()
 {
     background = new Background();
@@ -58,7 +59,7 @@ void GamePage::render()
     EnemyManager::getInstance()->render();
     player->render();
     collision->render(); // only boom effect
-
+    test->render();
     showPlayerHealth();
     showScore();
 }

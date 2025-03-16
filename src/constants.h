@@ -36,6 +36,12 @@
 #define SQUARE_BULLET 3
 #define ENEMY_BULLET 4
 
+// Item
+#define BUBBLE_SIZE 32
+#define ITEM_SIZE 24
+#define HEART_ITEM 5
+#define ITEM_VELOCITY 100.0f
+
 // Enemy setting
 #define ENEMY_SPEED_SLOW 10.0f
 #define ENEMY_SPEED_FAST 25.0f

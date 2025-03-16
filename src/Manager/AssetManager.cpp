@@ -22,7 +22,7 @@ void AssetManager::loadAllTextures()
     loadTexture("booster0", "assets/Ship/Boosters.png");
     loadTexture("booster1", "assets/Ship/Boosters_left.png");
     loadTexture("booster2", "assets/Ship/Boosters_right.png");
-    loadTexture("playerHealth", "assets/UI/Player_life_icon.png");
+    loadTexture("playerHealth", "assets/UI/heart.png");
     // Enemies
     loadTexture("alan", "assets/Enemies/Alan.png");
     loadTexture("bonbon", "assets/Enemies/Bon_Bon.png");
@@ -42,7 +42,7 @@ void AssetManager::loadAllTextures()
     loadTexture("gameover", "assets/UI/GAME_OVER.png");
     loadTexture("title", "assets/UI/game_title.png");
     loadTexture("frame", "assets/UI/frame.png");
-    loadTexture("zx", "assets/UI/zx.png"); 
+    loadTexture("bubble", "assets/UI/bubble.png"); 
 }
 
 AssetManager::AssetManager()
