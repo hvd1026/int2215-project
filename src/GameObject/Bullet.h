@@ -16,8 +16,7 @@ struct BulletProperties
 class Bullet
 {
 private:
-    int xPos, yPos;
-    int velocity;
+    float xPos, yPos;
     Animation *animate;
 
 public:

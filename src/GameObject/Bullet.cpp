@@ -11,14 +11,12 @@ std::vector<Bullet *> BulletManager::bullets;
 
 Bullet::Bullet(int x, int y, int type)
 {
-    xPos = x;
-    yPos = y;
+    xPos = (float)x;
+    yPos = (float)y;
     bulletType = type;
     properties = BulletManager::getInstance()->bulletProperties[type];
-    
-    velocity = properties.velocity;
     animate = new Animation(0, 0, 16, 16, properties.animationFrames, properties.animationTime, false);
-    dest = {xPos, yPos, BULLET_SIZE, BULLET_SIZE};
+    dest = {(int)xPos, (int)yPos, BULLET_SIZE, BULLET_SIZE};
     isActive = true;
 }
 
@@ -31,7 +29,7 @@ Bullet::~Bullet()
 void Bullet::update()
 {
     animate->update();
-    yPos -= velocity * TimeManager::getInstance()->getDeltaTime();
+    yPos -= properties.velocity * TimeManager::getInstance()->getDeltaTime();
     dest.y = yPos;
 
     // if bullet out of screen
@@ -51,10 +49,11 @@ void Bullet::render()
 BulletManager::BulletManager()
 {
     bulletProperties.resize(BULLET_TYPES_COUNT);
+    // id, damage, velocity, shootDelay, maxTime, animationTime, animationFrames
     bulletProperties[DEFAULT_BULLET] = {"default_bullet", 1, 500.0f, 0.2f, 0.0f, 0.5f, 1};
-    bulletProperties[CHARGED_BULLET] = {"charged_bullet", 10, 250.0f, 0.8f, 20.0f, 1.5f, 2};
-    bulletProperties[CIRCLE_BULLET]  = {"circle_bullet", 3, 300.0f, 0.4f, 20.0f, 2.0f, 4};
-    bulletProperties[SQUARE_BULLET]  = {"square_bullet", 6, 300.0f, 0.5f, 20.0f, 2.0f, 4};
+    bulletProperties[CHARGED_BULLET] = {"charged_bullet", 10, 200.0f, 0.8f, 20.0f, 2.0f, 2};
+    bulletProperties[CIRCLE_BULLET]  = {"circle_bullet", 1, 600.0f, 0.1f, 20.0f, 2.0f, 4};
+    bulletProperties[SQUARE_BULLET]  = {"square_bullet", 5, 250.0f, 0.6f, 20.0f, 2.0f, 4};
     bulletProperties[ENEMY_BULLET]   = {"enemy_bullet", 1, -100.0f, 5.0f, 0.0f, 4.0f, 4};
 }
 BulletManager *BulletManager::getInstance()
