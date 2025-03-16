@@ -40,8 +40,8 @@
 #define BUBBLE_SIZE 32
 #define ITEM_SIZE 24
 #define HEART_ITEM 5
-#define ITEM_VELOCITY 100.0f
-#define ITEM_SPAWN_RATE 20
+#define ITEM_VELOCITY 70.0f
+#define ITEM_SPAWN_RATE 15
 
 // Enemy setting
 #define ENEMY_SPEED_SLOW 10.0f
