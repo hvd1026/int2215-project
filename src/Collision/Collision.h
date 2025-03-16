@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <vector>
+#include "../GameObject/Item.h"
 #include "../GameObject/Player.h"
 #include "../GameObject/Enemy.h"
 #include "../GameObject/Bullet.h"
@@ -24,6 +25,7 @@ public:
     void bulletVsPlayer(Bullet *bullet, Player *player);
     void enemyOutOfScreen(Enemy *enemy);
     void bulletVsBullet(Bullet *bullet1, Bullet *bullet2);
+    void playerVsItem(Item *item);
 
 private:
     Player *m_player;

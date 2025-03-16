@@ -7,6 +7,7 @@
 #include "../GameObject/Player.h"
 #include "../GameObject/Enemy.h"
 #include "../GameObject/Bullet.h"
+#include "../GameObject/Item.h"
 #include "../Manager/AssetManager.h"
 #include "../constants.h"
 
@@ -61,6 +62,11 @@ void Collision::update()
         {
             bulletVsBullet(bullet1, bullet2);
         }
+    }
+
+    for (auto item : ItemManager::getInstance()->getItems())
+    {
+        playerVsItem(item);
     }
 }
 
@@ -153,5 +159,21 @@ void Collision::bulletVsBullet(Bullet *bullet1, Bullet *bullet2)
         bullet2->isActive = false;
         boom(bullet1->dest.x, bullet1->dest.y);
         score += (bullet1->properties).damage;
+    }
+}
+
+void Collision::playerVsItem(Item *item)
+{
+    if (isCollide(m_player->shipDest, item->bubbleDest))
+    {
+        item->isPickedUp = true;
+        if (item->type == HEART_ITEM){
+            if (m_player->hp < 3) {
+                m_player->hp += 1;
+            }
+        }
+        else {
+            m_player->currentShootType = item->type;
+        }
     }
 }

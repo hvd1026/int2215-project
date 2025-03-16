@@ -10,12 +10,12 @@ private:
     float xPos, yPos;
     float velocity;
     float shootTimer;
-    int currentShootType;
     SDL_Rect src[3]; // ship move left, straight, right
     SDL_Rect boosterDest;
     Animation *boosterAnimation;
 
 public:
+    int currentShootType;
     int hp;
     SDL_Rect shipDest;
     Player(int x, int y);
