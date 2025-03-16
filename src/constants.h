@@ -41,7 +41,7 @@
 #define ITEM_SIZE 24
 #define HEART_ITEM 5
 #define ITEM_VELOCITY 100.0f
-#define ITEM_SPAWN_RATE 10
+#define ITEM_SPAWN_RATE 20
 
 // Enemy setting
 #define ENEMY_SPEED_SLOW 10.0f

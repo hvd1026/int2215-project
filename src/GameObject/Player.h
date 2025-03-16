@@ -9,7 +9,8 @@ private:
     int state; // 0 : straight, 1: left, 2: right
     float xPos, yPos;
     float velocity;
-    float shootTimer;
+    float shootTimer; // time from last shoot
+    float bulletTimer; // time from last bullet change
     SDL_Rect src[3]; // ship move left, straight, right
     SDL_Rect boosterDest;
     Animation *boosterAnimation;

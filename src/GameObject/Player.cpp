@@ -15,6 +15,7 @@ Player::Player(int x, int y)
     // player properties
     hp = PLAYER_HP;
     shootTimer = 0.0f;
+    bulletTimer = 0.0f;
     xPos = (float)x;
     yPos = (float)y;
     velocity = PLAYER_SPEED;
@@ -41,6 +42,13 @@ void Player::update()
 {
     boosterAnimation->update();
     shootTimer += TimeManager::getInstance()->getDeltaTime();
+    if (currentShootType != DEFAULT_BULLET) {
+        bulletTimer += TimeManager::getInstance()->getDeltaTime();
+        if (bulletTimer >= (BulletManager::getInstance()->bulletProperties[currentShootType]).maxTime) {
+            currentShootType = DEFAULT_BULLET;
+            bulletTimer = 0.0f;
+        }
+    }
     // listen even => move and shoot
     state = 0; // move direction state
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT) && !moveOutOfScreen(MOVE_LEFT))
