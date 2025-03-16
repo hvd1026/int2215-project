@@ -10,13 +10,13 @@ private:
     float xPos, yPos;
     float velocity;
     float shootTimer; // time from last shoot
-    float bulletTimer; // time from last bullet change
     SDL_Rect src[3]; // ship move left, straight, right
     SDL_Rect boosterDest;
     Animation *boosterAnimation;
 
 public:
     int currentShootType;
+    float bulletTimer; // time from last bullet change
     int hp;
     SDL_Rect shipDest;
     Player(int x, int y);

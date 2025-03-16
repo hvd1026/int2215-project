@@ -174,6 +174,7 @@ void Collision::playerVsItem(Item *item)
         }
         else {
             m_player->currentShootType = item->type;
+            m_player->bulletTimer = 0.0f; // reset on change bullet type
         }
     }
 }
