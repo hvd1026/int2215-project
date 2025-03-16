@@ -7,8 +7,8 @@ class Player
 {
 private:
     int state; // 0 : straight, 1: left, 2: right
-    int xPos, yPos;
-    int velocity;
+    float xPos, yPos;
+    float velocity;
     float shootTimer;
     int currentShootType;
     SDL_Rect src[3]; // ship move left, straight, right

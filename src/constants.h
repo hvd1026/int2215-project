@@ -16,7 +16,7 @@
 #define MAX_ENEMY_SPAWN_TIME 0.3f
 
 // Player setting
-#define PLAYER_SPEED 300
+#define PLAYER_SPEED 250.0f
 #define PLAYER_SIZE 32
 #define PLAYER_BOOSTER_TIME 0.3f
 #define PLAYER_HP 3

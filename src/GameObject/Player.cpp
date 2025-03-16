@@ -15,8 +15,8 @@ Player::Player(int x, int y)
     // player properties
     hp = PLAYER_HP;
     shootTimer = 0.0f;
-    xPos = x;
-    yPos = y;
+    xPos = (float)x;
+    yPos = (float)y;
     velocity = PLAYER_SPEED;
     state = 0;
 
@@ -27,8 +27,8 @@ Player::Player(int x, int y)
     src[2] = {32, 0, 16, 16};                                                     // ship move right
 
     // Dest rect
-    shipDest = {xPos, yPos, PLAYER_SIZE, PLAYER_SIZE};
-    boosterDest = {xPos, yPos + PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE};
+    shipDest = {x, y, PLAYER_SIZE, PLAYER_SIZE};
+    boosterDest = {x, y + PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE};
 }
 
 Player::~Player()
@@ -71,10 +71,10 @@ void Player::update()
         shootTimer = 0.0f;
     }
     // update dest rect
-    boosterDest.x = xPos;
-    boosterDest.y = yPos + PLAYER_SIZE;
-    shipDest.x = xPos;
-    shipDest.y = yPos;
+    boosterDest.x = (int)xPos;
+    boosterDest.y = (int)yPos + PLAYER_SIZE;
+    shipDest.x = (int)xPos;
+    shipDest.y = (int)yPos;
 }
 
 void Player::render()
