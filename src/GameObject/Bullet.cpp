@@ -15,7 +15,7 @@ Bullet::Bullet(int x, int y, int type)
     yPos = y;
     bulletType = type;
     properties = BulletManager::getInstance()->bulletProperties[type];
-    damage = properties.damage;
+    
     velocity = properties.velocity;
     animate = new Animation(0, 0, 16, 16, properties.animationFrames, properties.animationTime, false);
     dest = {xPos, yPos, BULLET_SIZE, BULLET_SIZE};

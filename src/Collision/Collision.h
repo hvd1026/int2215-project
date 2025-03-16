@@ -11,6 +11,7 @@
 class Collision
 {
 public:
+    int score;
     Collision(Player *player);
     ~Collision();
     void update();

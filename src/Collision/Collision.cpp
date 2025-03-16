@@ -2,6 +2,7 @@
 #include <vector>
 #include <math.h>
 #include <iostream>
+#include <algorithm>
 #include "Collision.h"
 #include "../GameObject/Player.h"
 #include "../GameObject/Enemy.h"
@@ -25,6 +26,7 @@ Collision::~Collision()
 
 void Collision::update()
 {
+    score = 0;
     for (auto it = m_animations.begin(); it != m_animations.end();)
     {
         it->first->update();
@@ -108,12 +110,13 @@ void Collision::playerVsEnemy(Player *player, Enemy *enemy)
 void Collision::bulletVsEnemy(Bullet *bullet, Enemy *enemy)
 {
     SDL_Rect temp = enemy->m_Rect;
-    temp.y -= temp.h / 4; // sicne enemy is smaller than box
+    temp.y -= temp.h / 4; // because enemy is smaller than box
     if (bullet->bulletType != ENEMY_BULLET)
         if (isCollide(bullet->dest, temp))
         {
+            score += std::min(enemy->hp, (bullet->properties).damage);
             bullet->isActive = false;
-            enemy->hp -= bullet->damage;
+            enemy->hp -= (bullet->properties).damage;
             if (enemy->hp <= 0)
             {
                 boom(enemy->m_Rect.x, enemy->m_Rect.y);
@@ -128,14 +131,14 @@ void Collision::bulletVsPlayer(Bullet *bullet, Player *player)
         if (isCollide(bullet->dest, player->shipDest))
         {
             bullet->isActive = false;
-            player->hp -= bullet->damage;
+            player->hp -= (bullet->properties).damage;
             boom(player->shipDest.x, player->shipDest.y);
         }
 }
 
 void Collision::enemyOutOfScreen(Enemy *enemy)
 {
-    if (enemy->m_Rect.y + enemy->m_Rect.h/2 > SCREEN_HEIGHT)
+    if (enemy->m_Rect.y + enemy->m_Rect.h / 2 > SCREEN_HEIGHT)
     {
         m_player->hp -= 1;
         enemy->isActive = false;
@@ -149,5 +152,6 @@ void Collision::bulletVsBullet(Bullet *bullet1, Bullet *bullet2)
         bullet1->isActive = false;
         bullet2->isActive = false;
         boom(bullet1->dest.x, bullet1->dest.y);
+        score += (bullet1->properties).damage;
     }
 }

@@ -19,7 +19,6 @@ private:
     int xPos, yPos;
     int velocity;
     Animation *animate;
-    BulletProperties properties;
 
 public:
     Bullet(int x, int y, int type);
@@ -29,8 +28,8 @@ public:
 
     SDL_Rect dest;
     int bulletType;
-    int damage;
     bool isActive;
+    BulletProperties properties;
 };
 
 class BulletManager
