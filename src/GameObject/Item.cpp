@@ -57,7 +57,7 @@ int Item::randomType()
     }
     else
     {                         // 90% chance bullet
-        randNum = rand() % 4; // 0->3
+        randNum = rand() % 3 + 1; // 1->3
     }
     return randNum;
 }

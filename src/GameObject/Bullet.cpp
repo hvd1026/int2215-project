@@ -15,7 +15,7 @@ Bullet::Bullet(int x, int y, int type)
     yPos = (float)y;
     bulletType = type;
     properties = BulletManager::getInstance()->bulletProperties[type];
-    animate = new Animation(0, 0, 16, 16, properties.animationFrames, properties.animationTime, false);
+    animate = new Animation(0, 0, 16, 16, properties.animationFrames, properties.animationTime, (bulletType == SQUARE_BULLET)); // loop if square bullet
     dest = {(int)xPos, (int)yPos, BULLET_SIZE, BULLET_SIZE};
     isActive = true;
 }
@@ -52,8 +52,8 @@ BulletManager::BulletManager()
     // id, damage, velocity, shootDelay, maxTime, animationTime, animationFrames
     bulletProperties[DEFAULT_BULLET] = {"default_bullet", 1, 500.0f, 0.2f, 0.0f, 0.5f, 1};
     bulletProperties[CHARGED_BULLET] = {"charged_bullet", 10, 200.0f, 0.8f, 20.0f, 2.0f, 2};
-    bulletProperties[CIRCLE_BULLET]  = {"circle_bullet", 1, 600.0f, 0.1f, 20.0f, 2.0f, 4};
-    bulletProperties[SQUARE_BULLET]  = {"square_bullet", 5, 250.0f, 0.6f, 20.0f, 2.0f, 4};
+    bulletProperties[CIRCLE_BULLET]  = {"circle_bullet", 1, 600.0f, 0.1f, 20.0f, 1.5f, 4};
+    bulletProperties[SQUARE_BULLET]  = {"square_bullet", 3, 250.0f, 0.4f, 20.0f, 1.5f, 4};
     bulletProperties[ENEMY_BULLET]   = {"enemy_bullet", 1, -100.0f, 5.0f, 0.0f, 4.0f, 4};
 }
 BulletManager *BulletManager::getInstance()
