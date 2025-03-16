@@ -35,19 +35,29 @@ void Item::update()
 
 void Item::render()
 {
-    AssetManager::getInstance()->draw("bubble", {0,0,16,16}, bubbleDest);
-    if (type < 5){
-        AssetManager::getInstance()->draw((BulletManager::getInstance()->bulletProperties[type]).id, {0,0,16,16}, itemRect);
-    }else{
-        AssetManager::getInstance()->draw("playerHealth", {0,0,16,16}, itemRect);
+    AssetManager::getInstance()->draw("bubble", {0, 0, 16, 16}, bubbleDest);
+    if (type < 5)
+    {
+        AssetManager::getInstance()->draw((BulletManager::getInstance()->bulletProperties[type]).id, {0, 0, 16, 16}, itemRect);
+    }
+    else
+    {
+        AssetManager::getInstance()->draw("playerHealth", {0, 0, 16, 16}, itemRect);
     }
 }
 
 int Item::randomType()
 {
-    int randNum = rand() % 5 + 1;
-    if (randNum == 4) { // 4 is ENEMY_BULLET
-        randNum = 0;
+    int randNum;
+    int randomValue = rand() % 100 + 1; // Random value between 1 and 100
+
+    if (randomValue <= 10)
+    { // 10% health item
+        randNum = 5;
+    }
+    else
+    {                         // 90% chance bullet
+        randNum = rand() % 4; // 0->3
     }
     return randNum;
 }

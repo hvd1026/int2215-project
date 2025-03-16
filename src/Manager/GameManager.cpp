@@ -1,4 +1,6 @@
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <fstream>
@@ -77,6 +79,9 @@ void GameManager::init()
     {
         updateHighScore(0);
     }
+
+    // random
+    srand(time(0));
 }
 
 void GameManager::event()
