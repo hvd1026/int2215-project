@@ -12,7 +12,7 @@
 #define BOSS_INCREASE_RATE 1 // per 10 score
 #define MAX_BOSS_SPAWN_RATE 60
 #define ENEMY_SPAWN_TIME 0.6f
-#define ENEMY_SPAM_DECREASE 0.005f // per 100 score
+#define ENEMY_SPAM_DECREASE 0.018f // per 100 score
 #define MAX_ENEMY_SPAWN_TIME 0.3f
 
 // Player setting
