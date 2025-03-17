@@ -12,11 +12,12 @@
 #define BOSS_INCREASE_RATE 1 // per 10 score
 #define MAX_BOSS_SPAWN_RATE 60
 #define ENEMY_SPAWN_TIME 0.6f
-#define ENEMY_SPAM_DECREASE 0.005f // per 100 score
+#define ENEMY_SPAM_DECREASE 0.018f // per 100 score
 #define MAX_ENEMY_SPAWN_TIME 0.3f
+#define DEFAULT_VOLUME 32
 
 // Player setting
-#define PLAYER_SPEED 300
+#define PLAYER_SPEED 250.0f
 #define PLAYER_SIZE 32
 #define PLAYER_BOOSTER_TIME 0.3f
 #define PLAYER_HP 3
@@ -29,19 +30,19 @@
 
 // Bullet setting
 #define BULLET_SIZE 32
-#define SLOW_BULLET 0
-#define SLOW_BULLET_DELAY 0.8f
-#define SLOW_BULLET_ANIMATION_TIME 0.8f
-#define SLOW_BULLET_SPEED 300
-#define SLOW_BULLET_DAMAGE 10
-#define FAST_BULLET 1    
-#define FAST_BULLET_DELAY 0.2f
-#define FAST_BULLET_DAMAGE 1
-#define FAST_BULLET_SPEED 600
-#define ENEMY_BULLET 2
-#define ENEMY_BULLET_SPEED -100
-#define ENEMY_BULLET_DAMAGE 1
-#define ENEMY_BULLET_DELAY 5.0f
+#define BULLET_TYPES_COUNT 5
+#define DEFAULT_BULLET 0
+#define CHARGED_BULLET 1
+#define CIRCLE_BULLET 2
+#define SQUARE_BULLET 3
+#define ENEMY_BULLET 4
+
+// Item
+#define BUBBLE_SIZE 32
+#define ITEM_SIZE 24
+#define HEART_ITEM 5
+#define ITEM_VELOCITY 70.0f
+#define ITEM_SPAWN_RATE 15
 
 // Enemy setting
 #define ENEMY_SPEED_SLOW 10.0f

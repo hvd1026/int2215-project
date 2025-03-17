@@ -1,13 +1,17 @@
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <fstream>
+
+#include "../constants.h"
 
 #include "GameManager.h"
 #include "TimeManager.h"
 #include "AssetManager.h"
 #include "EventManager.h"
-#include "../constants.h"
 
 #include "../Pages/GamePage.h"
 #include "../Pages/HomePage.h"
@@ -16,9 +20,6 @@ HomePage *homePage;
 
 GameManager::GameManager()
 {
-    window = NULL;
-    renderer = NULL;
-    running = 0;
     init();
 }
 
@@ -30,7 +31,10 @@ GameManager::~GameManager()
 
 void GameManager::init()
 {
-    currentPage = HOME_PAGE;
+    window = NULL;
+    renderer = NULL;
+    running = 0;
+    currentPage = HOME_PAGE; // default is homepage
     hadBeenInited = false;
     firstTime = true;
     // Initialize SDL
@@ -51,42 +55,50 @@ void GameManager::init()
         {
             running = false;
         }
+        // init sdl_mixer
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+        {
+            running = false;
+        }
     }
 
     if (!running)
     {
         std::cerr << "[ERROR]: " << SDL_GetError() << std::endl;
+        return;
     }
     std::cout << "[INFO]: Game started successfully" << std::endl;
-    // favicon
-    favicon = IMG_Load("assets/UI/Player_life_icon.png");
-    SDL_SetWindowIcon(window, favicon);
-    // timer
-    timer = TimeManager::getInstance();
-
-    // asset manager
+    // Create instances of managers
+    TimeManager::getInstance();
+    EventManager::getInstance();
     AssetManager::getInstance()->setRenderer(renderer);
     AssetManager::getInstance()->loadAllTextures();
+    AssetManager::getInstance()->loadAllSounds();
 
-    // high score
-    // m_highScore = 0;
+    // Load high score from file
     std::ifstream file("highscore.txt");
     if (file.is_open())
     {
         file >> m_highScore;
         file.close();
     }
-    else{
+    else
+    {
         updateHighScore(0);
     }
-    
+
+    // random seed
+    srand(time(0));
+    // play background music
+    bgm_channel = AssetManager::getInstance()->playSound("bgm", -1); // inf loop
+    Mix_Volume(bgm_channel, DEFAULT_VOLUME); 
 }
 
 void GameManager::event()
 {
-    SDL_Event event;
-    SDL_PollEvent(&event);
-    switch (event.type)
+    SDL_Event ev;
+    SDL_PollEvent(&ev);
+    switch (ev.type)
     {
     case SDL_QUIT:
         running = 0;
@@ -121,26 +133,28 @@ void GameManager::update()
         hadBeenInited = true;
     }
     // update pages
-    if (currentPage == GAME_PAGE){
+    if (currentPage == HOME_PAGE)
+        homePage->update();
+    if (currentPage == GAME_PAGE)
+    {
         firstTime = false;
         gamePage->update();
     }
-    if (currentPage == HOME_PAGE)
-        homePage->update();
     // change page
     if (currentPage == HOME_PAGE && hadBeenInited && homePage->startedGame)
     {
         changePage(GAME_PAGE);
+        Mix_Volume(bgm_channel, DEFAULT_VOLUME/2); // 50% volume
     }
-    if (currentPage == GAME_PAGE && hadBeenInited &&  gamePage->gameOver)
+    if (currentPage == GAME_PAGE && hadBeenInited && gamePage->gameOver)
     {
-        if (gamePage->lastScore > m_highScore)
+        if (gamePage->score > m_highScore)
         {
-            updateHighScore(gamePage->lastScore);
+            updateHighScore(gamePage->score);
         }
         changePage(HOME_PAGE);
+        Mix_Volume(bgm_channel, DEFAULT_VOLUME);
     }
-
 }
 void GameManager::render()
 {
@@ -154,9 +168,6 @@ void GameManager::render()
 
 void GameManager::clean()
 {
-    SDL_FreeSurface(favicon);
-    favicon = NULL;
-
     if (currentPage == GAME_PAGE && hadBeenInited)
     {
         gamePage->clean();
@@ -170,39 +181,25 @@ void GameManager::clean()
         homePage = nullptr;
     }
 
-    timer->clean();
-    timer = NULL;
-    AssetManager::getInstance()->clean();
+    TimeManager::getInstance()->clean();
     EventManager::getInstance()->clean();
+    AssetManager::getInstance()->clean();
     SDL_DestroyWindow(window);
     window = NULL;
     SDL_DestroyRenderer(renderer);
     renderer = NULL;
     SDL_Quit();
     IMG_Quit();
+    Mix_Quit();
 }
 
-void GameManager::run()
-{
-    while (running)
-    {
-        timer->update(); // update delta time
-        event();
-        if (timer->getDeltaTime() >= (1.0f / FPS)) // limit game's fps
-        {
-            update();       // update game
-            render();       // render everything
-            timer->reset(); // reset delta time
-        }
-    }
-}
 
 void GameManager::changePage(int newPage)
 {
     // clean old page
     if (currentPage == GAME_PAGE)
     {
-        recentScore = gamePage->lastScore;
+        recentScore = gamePage->score;
         gamePage->clean();
         delete gamePage;
         gamePage = nullptr;
@@ -227,5 +224,20 @@ void GameManager::updateHighScore(int newHighScore)
     {
         outFile << m_highScore;
         outFile.close();
+    }
+}
+
+void GameManager::run()
+{
+    while (running)
+    {
+        TimeManager::getInstance()->update(); // update delta time
+        event();
+        if (TimeManager::getInstance()->getDeltaTime() >= (1.0f / FPS)) // limit game's fps
+        {
+            update();                            // update game
+            render();                            // render everything
+            TimeManager::getInstance()->reset(); // reset delta time
+        }
     }
 }

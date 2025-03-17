@@ -11,12 +11,13 @@
 
 Player::Player(int x, int y)
 {
+    currentShootType = DEFAULT_BULLET;
+    // player properties
     hp = PLAYER_HP;
-    currentShootType = FAST_BULLET;
-    shootDelay = FAST_BULLET_DELAY;
-    shootTimmer = 0.0f;
-    xPos = x;
-    yPos = y;
+    shootTimer = 0.0f;
+    bulletTimer = 0.0f;
+    xPos = (float)x;
+    yPos = (float)y;
     velocity = PLAYER_SPEED;
     state = 0;
 
@@ -27,8 +28,8 @@ Player::Player(int x, int y)
     src[2] = {32, 0, 16, 16};                                                     // ship move right
 
     // Dest rect
-    shipDest = {xPos, yPos, PLAYER_SIZE, PLAYER_SIZE};
-    boosterDest = {xPos, yPos + PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE};
+    shipDest = {x, y, PLAYER_SIZE, PLAYER_SIZE};
+    boosterDest = {x, y + PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE};
 }
 
 Player::~Player()
@@ -40,9 +41,16 @@ Player::~Player()
 void Player::update()
 {
     boosterAnimation->update();
-    shootTimmer += TimeManager::getInstance()->getDeltaTime();
+    shootTimer += TimeManager::getInstance()->getDeltaTime();
+    if (currentShootType != DEFAULT_BULLET) {
+        bulletTimer += TimeManager::getInstance()->getDeltaTime();
+        if (bulletTimer >= (BulletManager::getInstance()->bulletProperties[currentShootType]).maxTime) {
+            currentShootType = DEFAULT_BULLET;
+            bulletTimer = 0.0f;
+        }
+    }
     // listen even => move and shoot
-    state = 0;
+    state = 0; // move direction state
     if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_LEFT) && !moveOutOfScreen(MOVE_LEFT))
     {
         // left
@@ -65,28 +73,16 @@ void Player::update()
         // down
         yPos += velocity * TimeManager::getInstance()->getDeltaTime();
     }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_Z))
-    {
-        currentShootType = FAST_BULLET;
-        shootDelay = FAST_BULLET_DELAY;
-        shootTimmer = 0.0f;
-    }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_X))
-    {
-        currentShootType = SLOW_BULLET;
-        shootDelay = SLOW_BULLET_DELAY;
-        shootTimmer = 0.0f;
-    }
-    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE) && shootTimmer >= shootDelay)
+    if (EventManager::getInstance()->isKeyDown(SDL_SCANCODE_SPACE) && shootTimer >= BulletManager::getInstance()->bulletProperties[currentShootType].shootDelay)
     {
         shoot(currentShootType);
-        shootTimmer = 0.0f;
+        shootTimer = 0.0f;
     }
     // update dest rect
-    boosterDest.x = xPos;
-    boosterDest.y = yPos + PLAYER_SIZE;
-    shipDest.x = xPos;
-    shipDest.y = yPos;
+    boosterDest.x = (int)xPos;
+    boosterDest.y = (int)yPos + PLAYER_SIZE;
+    shipDest.x = (int)xPos;
+    shipDest.y = (int)yPos;
 }
 
 void Player::render()
@@ -99,6 +95,7 @@ void Player::render()
 
 void Player::shoot(int type)
 {
+    AssetManager::getInstance()->playSound("shoot", 0);
     BulletManager::getInstance()->addBullet(new Bullet(xPos + PLAYER_SIZE / 2 - BULLET_SIZE / 2, yPos, type));
 }
 

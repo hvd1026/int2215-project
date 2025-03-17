@@ -6,38 +6,22 @@
 #include <SDL.h>
 #include <iostream>
 #include <vector>
-BulletManager* BulletManager::instance = nullptr;
-std::vector<Bullet*> BulletManager::bullets;
+BulletManager *BulletManager::instance = nullptr;
+std::vector<Bullet *> BulletManager::bullets;
 
 Bullet::Bullet(int x, int y, int type)
 {
-    xPos = x;
-    yPos = y;
+    xPos = (float)x;
+    yPos = (float)y;
     bulletType = type;
-    if (type == SLOW_BULLET)
-    {
-        velocity = SLOW_BULLET_SPEED;
-        damage = SLOW_BULLET_DAMAGE;
-        animate = new Animation(0, 0, 16, 16, 2, SLOW_BULLET_ANIMATION_TIME, false);
-    }   
-    else if (type == FAST_BULLET)
-    {
-        animate = new Animation(0, 0, 16, 16, 1, SLOW_BULLET_ANIMATION_TIME, false); // prevent crash when call animate->update()
-        damage = FAST_BULLET_DAMAGE;
-        velocity = FAST_BULLET_SPEED;
-    }
-    else{
-        animate = new Animation(32, 0, 16, 16, 2, SLOW_BULLET_ANIMATION_TIME, false);
-        damage = ENEMY_BULLET_DAMAGE;
-        velocity = ENEMY_BULLET_SPEED;
-    }
-    dest = {xPos, yPos, BULLET_SIZE, BULLET_SIZE};
+    properties = BulletManager::getInstance()->bulletProperties[type];
+    animate = new Animation(0, 0, 16, 16, properties.animationFrames, properties.animationTime, (bulletType == SQUARE_BULLET)); // loop if square bullet
+    dest = {(int)xPos, (int)yPos, BULLET_SIZE, BULLET_SIZE};
     isActive = true;
 }
 
 Bullet::~Bullet()
 {
-    // std::cout << "[INFO]: Bullet removed" << std::endl;
     delete animate;
     animate = NULL;
 }
@@ -45,7 +29,7 @@ Bullet::~Bullet()
 void Bullet::update()
 {
     animate->update();
-    yPos -= velocity * TimeManager::getInstance()->getDeltaTime();
+    yPos -= properties.velocity * TimeManager::getInstance()->getDeltaTime();
     dest.y = yPos;
 
     // if bullet out of screen
@@ -57,12 +41,66 @@ void Bullet::update()
 
 void Bullet::render()
 {
-    if (bulletType == SLOW_BULLET)
-        AssetManager::getInstance()->draw("slowBullet", animate->getSrcRect(), dest);
-    else if (bulletType == FAST_BULLET){
-        AssetManager::getInstance()->draw("fastBullet", {0,0,16,16}, dest);
+    AssetManager::getInstance()->draw(properties.id, animate->getSrcRect(), dest);
+}
+
+// BulletManager
+
+BulletManager::BulletManager()
+{
+    bulletProperties.resize(BULLET_TYPES_COUNT);
+    // id, damage, velocity, shootDelay, maxTime, animationTime, animationFrames
+    bulletProperties[DEFAULT_BULLET] = {"default_bullet", 1, 500.0f, 0.2f, 0.0f, 0.5f, 1};
+    bulletProperties[CHARGED_BULLET] = {"charged_bullet", 20, 200.0f, 0.5f, 20.0f, 2.0f, 2};
+    bulletProperties[CIRCLE_BULLET]  = {"circle_bullet", 1, 600.0f, 0.1f, 20.0f, 1.0f, 4};
+    bulletProperties[SQUARE_BULLET]  = {"square_bullet", 3, 250.0f, 0.3f, 20.0f, 1.5f, 4};
+    bulletProperties[ENEMY_BULLET]   = {"enemy_bullet", 1, -100.0f, 5.0f, 0.0f, 4.0f, 4};
+}
+BulletManager *BulletManager::getInstance()
+{
+    if (instance == nullptr)
+    {
+        instance = new BulletManager();
     }
-    else{
-        AssetManager::getInstance()->draw("enemyBullet", animate->getSrcRect(), dest);
+    return instance;
+}
+
+void BulletManager::addBullet(Bullet *bullet)
+{
+    bullets.push_back(bullet);
+}
+
+std::vector<Bullet *> BulletManager::getBullets()
+{
+    return bullets;
+}
+void BulletManager::update()
+{
+    for (auto it = bullets.begin(); it != bullets.end(); it++)
+    {
+        (*it)->update();
+        if (!(*it)->isActive)
+        {
+            delete (*it);
+            bullets.erase(it);
+            it--;
+        }
     }
+}
+void BulletManager::render()
+{
+    for (auto it = bullets.begin(); it != bullets.end(); it++)
+    {
+        (*it)->render();
+    }
+}
+void BulletManager::clean()
+{
+    for (auto bullet : bullets)
+    {
+        delete bullet;
+    }
+    bullets.clear();
+    delete instance;
+    instance = nullptr;
 }

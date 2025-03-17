@@ -9,6 +9,7 @@
 #include "../constants.h"
 #include "../Manager/TimeManager.h"
 #include "../Manager/AssetManager.h"
+#include "Item.h"
 
 std::vector<Enemy *> EnemyManager::enemies;
 EnemyManager *EnemyManager::instance = nullptr;
@@ -19,7 +20,7 @@ Enemy::Enemy(std::string name, int x, int y, int _hp)
     xpos = x;
     ypos = y;
     hp = _hp;
-    timeCounter = -ENEMY_BULLET_DELAY;
+    timeCounter = 0;
     isActive = true;
     if (hp ==  1)
     {
@@ -51,12 +52,17 @@ Enemy::~Enemy()
 {
     delete m_Animation;
     m_Animation = nullptr;
+    // spawm item when enemy is destroyed
+    if (rand() % 100 + 1 <= ITEM_SPAWN_RATE)
+    {
+        ItemManager::getInstance()->addItem(new Item(m_Rect.x, m_Rect.y));
+    }
 }
 
 void Enemy::update()
 {
     timeCounter += TimeManager::getInstance()->getDeltaTime();
-    if (timeCounter >= ENEMY_BULLET_DELAY)
+    if (timeCounter >= BulletManager::getInstance()->bulletProperties[ENEMY_BULLET].shootDelay)
     {
         int randomValue = rand() % 100 + 1;
         if (randomValue <= ENEMY_SHOOTING_PERCENTRATE)
@@ -86,6 +92,7 @@ void Enemy::render()
 
 void Enemy::shoot()
 {
+    AssetManager::getInstance()->playSound("enemy_shoot", 0);
     BulletManager::getInstance()->addBullet(new Bullet(
         m_Rect.x, m_Rect.y + m_Rect.h, ENEMY_BULLET));
 }

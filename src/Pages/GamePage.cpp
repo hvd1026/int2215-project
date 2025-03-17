@@ -10,6 +10,7 @@
 #include "../GameObject/Background.h"
 #include "../GameObject/Bullet.h"
 #include "../GameObject/Enemy.h"
+#include "../GameObject/Item.h"
 
 GamePage::GamePage()
 {
@@ -22,78 +23,64 @@ GamePage::~GamePage()
 
 void GamePage::init()
 {
-    std::cout << "[INFO]: GamePage loaded" << std::endl;
     background = new Background();
     player = new Player((SCREEN_WIDTH - PLAYER_SIZE) / 2, SCREEN_HEIGHT - 100);
     collision = new Collision(player);
     gameOver = false;
-    score = 0.0f;
+    score = 0;
+    timer = 0.0f;
 
-    timmer = 0.0f;
     enemySpawnTime = ENEMY_SPAWN_TIME;
     bossSpawnRate = BOSS_SPAWN_RATE;
+    lastDecreaseSpawnTime = 0; // last score that decrease spawn time
+    lastIncreaseSpawnRate = 0; // last score that increase spawn boss rate
 
-    lastDecreaseSpawnTime = 0;
-    lastIncreaseSpawnRate = 0;
+    std::cout << "[INFO]: GamePage loaded" << std::endl;
 }
 void GamePage::update()
 {
     if (player->hp <= 0)
     {
         gameOver = true;
-        lastScore = (int)score;
         return;
     }
     background->update();
     player->update();
-    collision->update();
     BulletManager::getInstance()->update();
     EnemyManager::getInstance()->update();
+    ItemManager::getInstance()->update();
+    collision->update();
     spawnEnemy();
-    score += TimeManager::getInstance()->getDeltaTime() * SCORE_PER_SECOND;
+    score += collision->score;
 }
 void GamePage::render()
 {
     background->render();
     BulletManager::getInstance()->render();
     EnemyManager::getInstance()->render();
+    ItemManager::getInstance()->render();
     player->render();
-    collision->render();
-
-
-    //render list bullet
-    //z
-    AssetManager::getInstance()->draw("zx", {0,0,44,43}, {10+8,SCREEN_HEIGHT - 50-8-16,16,16});
-    AssetManager::getInstance()->draw("frame", {0,0,512,512}, {10-8, SCREEN_HEIGHT - 50-8, 48, 48});
-    AssetManager::getInstance()->draw("fastBullet", {0,0,16,16}, {10, SCREEN_HEIGHT - 50, 32, 32});
-    //x
-    AssetManager::getInstance()->draw("zx", {44,0,44,43}, {SCREEN_WIDTH - 10 - 16 - 8,SCREEN_HEIGHT - 50-8-16,16,16});
-    AssetManager::getInstance()->draw("frame", {0,0,512,512}, {SCREEN_WIDTH - 10 - 48+8, SCREEN_HEIGHT - 50-8, 48, 48});
-    AssetManager::getInstance()->draw("slowBullet", {16,0,16,16}, {SCREEN_WIDTH - 10 - 32, SCREEN_HEIGHT - 50, 32, 32});
+    collision->render(); // only boom effect
     showPlayerHealth();
     showScore();
 }
 void GamePage::clean()
 {
-    std::cout << "[INFO]: GamePage cleaned" << std::endl;
     EnemyManager::getInstance()->clean();
     BulletManager::getInstance()->clean();
+    ItemManager::getInstance()->clean();
     delete background;
     delete player;
     delete collision;
+    std::cout << "[INFO]: GamePage cleaned" << std::endl;
 }
 
 void GamePage::showPlayerHealth()
 {
-    int cnt = player->hp;
-    if (cnt <= 0)
-    {
-        return;
-    }
     SDL_Rect src, dest;
     src = {0, 0, 16, 16};
     dest = {10, 10, 24, 24};
-    for (int i = 0; i < cnt; i++)
+    for (int i = 0; i < player->hp; i++)
     {
         AssetManager::getInstance()->draw("playerHealth", src, dest);
         dest.x += 30;
@@ -102,7 +89,7 @@ void GamePage::showPlayerHealth()
 
 void GamePage::showScore()
 {
-    int scoreInt = (int)score;
+    int tmpScore = score;
     SDL_Rect dest;
 
     SDL_Rect numberSrc[10];
@@ -118,46 +105,53 @@ void GamePage::showScore()
     numberSrc[9] = {24, 8, 8, 8};
 
     dest = {SCREEN_WIDTH - 32, 10, 24, 24};
-    while (scoreInt > 0)
+    if (tmpScore == 0)
     {
-        int digit = scoreInt % 10;
-        scoreInt /= 10;
-        AssetManager::getInstance()->draw("number", numberSrc[digit], dest);
-        dest.x -= 20;
+        AssetManager::getInstance()->draw("number", numberSrc[0], dest);
     }
+    else
+        while (tmpScore > 0)
+        {
+            int digit = tmpScore % 10;
+            tmpScore /= 10;
+            AssetManager::getInstance()->draw("number", numberSrc[digit], dest);
+            dest.x -= 20;
+        }
 }
 
 void GamePage::spawnEnemy()
 {
-    timmer += TimeManager::getInstance()->getDeltaTime();
-    int scoreInt = (int)score; 
-    if (timmer >= enemySpawnTime)
+    timer += TimeManager::getInstance()->getDeltaTime();
+    int tmpScore = (int)score;
+    if (timer >= enemySpawnTime)
     {
-        if (randomIsBoss()){
+        if (randomIsBoss())
+        {
             EnemyManager::getInstance()->addEnemy(new Enemy(
-                randomEnemyName(), randomXPos(), -64, randomHp()
-            ));
-        }else{
-            EnemyManager::getInstance()->addEnemy(new Enemy(
-                randomEnemyName(), randomXPos(), -32, 1
-            ));
+                randomEnemyName(), randomXPos(), -64, randomHp()));
         }
-        timmer = 0.0f;   
+        else
+        {
+            EnemyManager::getInstance()->addEnemy(new Enemy(
+                randomEnemyName(), randomXPos(), -32, 1));
+        }
+        timer = 0.0f;
     }
     // make game harder
-    if (bossSpawnRate < MAX_BOSS_SPAWN_RATE && scoreInt % 10 == 0 && scoreInt != lastIncreaseSpawnRate)
+    if (bossSpawnRate < MAX_BOSS_SPAWN_RATE && tmpScore % 10 == 0 && tmpScore != lastIncreaseSpawnRate)
     {
         bossSpawnRate += BOSS_INCREASE_RATE;
-        lastIncreaseSpawnRate = scoreInt;
+        lastIncreaseSpawnRate = tmpScore;
     }
-    if (enemySpawnTime > MAX_ENEMY_SPAWN_TIME && scoreInt % 100 == 0 && scoreInt != lastDecreaseSpawnTime)
+    if (enemySpawnTime > MAX_ENEMY_SPAWN_TIME && tmpScore % 100 == 0 && tmpScore != lastDecreaseSpawnTime)
     {
         enemySpawnTime -= ENEMY_SPAM_DECREASE;
-        lastDecreaseSpawnTime = scoreInt;
+        lastDecreaseSpawnTime = tmpScore;
     }
 }
 
-std::string GamePage::randomEnemyName(){
+std::string GamePage::randomEnemyName()
+{
     int random = rand() % 3;
     switch (random)
     {
@@ -172,7 +166,8 @@ std::string GamePage::randomEnemyName(){
     }
 }
 
-bool GamePage::randomIsBoss(){
+bool GamePage::randomIsBoss()
+{
     int random = rand() % 101;
     if (random <= BOSS_SPAWN_RATE)
     {
@@ -181,10 +176,12 @@ bool GamePage::randomIsBoss(){
     return false;
 }
 
-int GamePage::randomHp(){
+int GamePage::randomHp()
+{
     return 10 + (rand() % 11);
 }
 
-int GamePage::randomXPos(){
+int GamePage::randomXPos()
+{
     return rand() % (SCREEN_WIDTH - 64);
 }
