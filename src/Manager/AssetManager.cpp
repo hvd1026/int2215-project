@@ -1,4 +1,5 @@
 #include "AssetManager.h"
+#include "../constants.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -45,6 +46,16 @@ void AssetManager::loadAllTextures()
     loadTexture("bubble", "assets/UI/bubble.png"); 
 }
 
+void AssetManager::loadAllSounds()
+{
+    mSounds["bgm"] = Mix_LoadWAV("assets/sound/bgm.wav");
+    mSounds["shoot"] = Mix_LoadWAV("assets/sound/shoot.wav");
+    mSounds["enemy_shoot"] = Mix_LoadWAV("assets/sound/enemy_shoot.wav");
+    mSounds["explosion"] = Mix_LoadWAV("assets/sound/explosion.wav");
+    mSounds["hit"] = Mix_LoadWAV("assets/sound/hit.wav");
+    mSounds["item"] = Mix_LoadWAV("assets/sound/item.wav");
+}
+
 AssetManager::AssetManager()
 {
     mRenderer = nullptr;
@@ -80,6 +91,23 @@ void AssetManager::draw(std::string id, SDL_Rect src, SDL_Rect dest, SDL_Rendere
     SDL_RenderCopyEx(mRenderer, mTextures[id], &src, &dest, 0, NULL, flip = SDL_FLIP_NONE);
 }
 
+int AssetManager::playSound(std::string id, int loop)
+{
+    if (mSounds[id] == nullptr)
+    {
+        std::cerr << "[ERROR]: Sound " << id << " not found" << std::endl;
+        return 0;
+    }
+    int channel = Mix_PlayChannel(-1, mSounds[id], loop);
+    Mix_Volume(channel, DEFAULT_VOLUME);
+    return channel;
+}
+
+void AssetManager::stopSound(int channel)
+{
+    Mix_HaltChannel(channel);
+}
+
 void AssetManager::clean()
 {
     std::cout << "[INFO]: AssetManager destroyed" << std::endl;
@@ -88,6 +116,12 @@ void AssetManager::clean()
         SDL_DestroyTexture(i.second);
     }
 
+    for (auto const &i : mSounds)
+    {
+        Mix_FreeChunk(i.second);
+    }
+
+    mSounds.clear();
     mTextures.clear();
     delete sInstance;
     sInstance = nullptr;

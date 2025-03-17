@@ -92,6 +92,7 @@ void Enemy::render()
 
 void Enemy::shoot()
 {
+    AssetManager::getInstance()->playSound("enemy_shoot", 0);
     BulletManager::getInstance()->addBullet(new Bullet(
         m_Rect.x, m_Rect.y + m_Rect.h, ENEMY_BULLET));
 }

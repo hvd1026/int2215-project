@@ -14,6 +14,7 @@
 #define ENEMY_SPAWN_TIME 0.6f
 #define ENEMY_SPAM_DECREASE 0.018f // per 100 score
 #define MAX_ENEMY_SPAWN_TIME 0.3f
+#define DEFAULT_VOLUME 32
 
 // Player setting
 #define PLAYER_SPEED 250.0f

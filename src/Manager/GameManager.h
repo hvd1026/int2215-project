@@ -28,4 +28,6 @@ private:
     int currentPage; // current page of game
     bool hadBeenInited; // if page had been initialized
     bool firstTime; // first time render home page
+
+    int bgm_channel;
 };

@@ -95,6 +95,7 @@ void Player::render()
 
 void Player::shoot(int type)
 {
+    AssetManager::getInstance()->playSound("shoot", 0);
     BulletManager::getInstance()->addBullet(new Bullet(xPos + PLAYER_SIZE / 2 - BULLET_SIZE / 2, yPos, type));
 }
 

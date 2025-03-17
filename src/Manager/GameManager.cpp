@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <fstream>
 
 #include "../constants.h"
@@ -54,6 +55,11 @@ void GameManager::init()
         {
             running = false;
         }
+        // init sdl_mixer
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+        {
+            running = false;
+        }
     }
 
     if (!running)
@@ -67,6 +73,7 @@ void GameManager::init()
     EventManager::getInstance();
     AssetManager::getInstance()->setRenderer(renderer);
     AssetManager::getInstance()->loadAllTextures();
+    AssetManager::getInstance()->loadAllSounds();
 
     // Load high score from file
     std::ifstream file("highscore.txt");
@@ -80,8 +87,11 @@ void GameManager::init()
         updateHighScore(0);
     }
 
-    // random
+    // random seed
     srand(time(0));
+    // play background music
+    bgm_channel = AssetManager::getInstance()->playSound("bgm", -1); // inf loop
+    Mix_Volume(bgm_channel, DEFAULT_VOLUME); 
 }
 
 void GameManager::event()
@@ -134,6 +144,7 @@ void GameManager::update()
     if (currentPage == HOME_PAGE && hadBeenInited && homePage->startedGame)
     {
         changePage(GAME_PAGE);
+        Mix_Volume(bgm_channel, DEFAULT_VOLUME/2); // 50% volume
     }
     if (currentPage == GAME_PAGE && hadBeenInited && gamePage->gameOver)
     {
@@ -142,6 +153,7 @@ void GameManager::update()
             updateHighScore(gamePage->score);
         }
         changePage(HOME_PAGE);
+        Mix_Volume(bgm_channel, DEFAULT_VOLUME);
     }
 }
 void GameManager::render()
@@ -178,6 +190,7 @@ void GameManager::clean()
     renderer = NULL;
     SDL_Quit();
     IMG_Quit();
+    Mix_Quit();
 }
 
 

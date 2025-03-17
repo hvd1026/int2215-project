@@ -81,6 +81,7 @@ void Collision::render()
 
 void Collision::boom(int x, int y)
 {
+    AssetManager::getInstance()->playSound("explosion", 0);
     m_animations.push_back({new Animation(0, 0, 16, 16, 6, BOOM_ANIMATION_TIME, false), {x, y, 32, 32}});
 }
 
@@ -123,6 +124,7 @@ void Collision::bulletVsEnemy(Bullet *bullet, Enemy *enemy)
             score += std::min(enemy->hp, (bullet->properties).damage);
             bullet->isActive = false;
             enemy->hp -= (bullet->properties).damage;
+            AssetManager::getInstance()->playSound("hit", 0);
             if (enemy->hp <= 0)
             {
                 boom(enemy->m_Rect.x, enemy->m_Rect.y);
@@ -167,6 +169,7 @@ void Collision::playerVsItem(Item *item)
     if (isCollide(m_player->shipDest, item->bubbleDest))
     {
         item->isPickedUp = true;
+        AssetManager::getInstance()->playSound("item", 0);
         if (item->type == HEART_ITEM){
             if (m_player->hp < 3) {
                 m_player->hp += 1;
