@@ -3,7 +3,8 @@ In this game, the player controls a spaceship on a journey through the universe.
 ## 📌 Features
 + Uses keyboard to control
 + Enemies appear randomly
-+ Score system based on damage dealt to enemies..
++ Difficulty gradually increases
++ Score system based on damage dealt to enemies.
 ## 🎥 Demo Video
 **Video URL**: https://youtu.be/XpFIGYSv71c
 ## 🛠 Technologies Used
