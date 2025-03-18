@@ -26,52 +26,12 @@ public:
 class EnemyManager
 {
 public:
-    static EnemyManager *getInstance()
-    {
-        if (instance == nullptr)
-        {
-            instance = new EnemyManager();
-        }
-        return instance;
-    };
-    void addEnemy(Enemy *enemy)
-    {
-        enemies.push_back(enemy);
-    };
-    std::vector<Enemy *> getEnemies()
-    {
-        return enemies;
-    };
-    void update()
-    {
-        for (auto it = enemies.begin(); it != enemies.end(); it++)
-        {
-            (*it)->update();
-            if (!(*it)->isActive)
-            {
-                delete (*it);
-                enemies.erase(it);
-                it--;
-            }
-        }
-    };
-    void render()
-    {
-        for (auto enemy : enemies)
-        {
-            enemy->render();
-        }
-    };
-    void clean()
-    {
-        for (auto enemy : enemies)
-        {
-            delete enemy;
-        }
-        enemies.clear();
-        delete instance;
-        instance = nullptr;
-    };
+    static EnemyManager *getInstance();
+    void addEnemy(Enemy *enemy);
+    std::vector<Enemy *> getEnemies();
+    void update();
+    void render();
+    void clean();
 
 private:
     EnemyManager() {};

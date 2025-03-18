@@ -22,7 +22,7 @@ Enemy::Enemy(std::string name, int x, int y, int _hp)
     hp = _hp;
     timeCounter = 0;
     isActive = true;
-    if (hp ==  1)
+    if (hp == 1)
     {
         m_Rect = {(int)xpos, (int)ypos, 32, 32};
         velocity = ENEMY_SPEED_FAST;
@@ -96,3 +96,54 @@ void Enemy::shoot()
     BulletManager::getInstance()->addBullet(new Bullet(
         m_Rect.x, m_Rect.y + m_Rect.h, ENEMY_BULLET));
 }
+
+EnemyManager *EnemyManager::getInstance()
+{
+    if (instance == nullptr)
+    {
+        instance = new EnemyManager();
+    }
+    return instance;
+}
+
+void EnemyManager::addEnemy(Enemy *enemy)
+{
+    enemies.push_back(enemy);
+}
+
+std::vector<Enemy *> EnemyManager::getEnemies()
+{
+    return enemies;
+}
+
+void EnemyManager::update()
+{
+    for (auto it = enemies.begin(); it != enemies.end(); it++)
+    {
+        (*it)->update();
+        if (!(*it)->isActive)
+        {
+            delete (*it);
+            enemies.erase(it);
+            it--;
+        }
+    }
+};
+
+void EnemyManager::render()
+{
+    for (auto enemy : enemies)
+    {
+        enemy->render();
+    }
+};
+void EnemyManager::clean()
+{
+    for (auto enemy : enemies)
+    {
+        delete enemy;
+    }
+    enemies.clear();
+    delete instance;
+    instance = nullptr;
+};
