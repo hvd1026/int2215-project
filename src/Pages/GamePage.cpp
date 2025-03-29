@@ -63,6 +63,7 @@ void GamePage::render()
     collision->render(); // only boom effect
     showPlayerHealth();
     showScore();
+    showBulletType();
 }
 void GamePage::clean()
 {
@@ -117,6 +118,14 @@ void GamePage::showScore()
             AssetManager::getInstance()->draw("number", numberSrc[digit], dest);
             dest.x -= 20;
         }
+}
+
+void GamePage::showBulletType()
+{
+    // frame
+    AssetManager::getInstance()->draw("frame", {0,0,512,512}, {SCREEN_WIDTH - 10 - 48+8, SCREEN_HEIGHT - 50-8, 48, 48});
+    // bullet
+    AssetManager::getInstance()->draw(BulletManager::getInstance()->bulletProperties[player->currentShootType].id, {0,0,16,16}, {SCREEN_WIDTH - 10 - 32, SCREEN_HEIGHT - 50, 32, 32});
 }
 
 void GamePage::spawnEnemy()

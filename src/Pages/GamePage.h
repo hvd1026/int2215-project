@@ -20,10 +20,6 @@ public:
     void update();
     void render();
     void clean();
-    
-    void showPlayerHealth();
-    void showScore();
-    void spawnEnemy();
 
 private:
     float timer;
@@ -37,8 +33,11 @@ private:
     Collision *collision;
 
     std::string randomEnemyName();
+    void showPlayerHealth();
+    void showScore();
+    void showBulletType();
+    void spawnEnemy();
     bool randomIsBoss();
     int randomHp();
     int randomXPos();
 };
-
